@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<h1>Hola</h1>
+
+
+	<a href={% url 'listar_usuarios' %}>listar_usuarios</a><br>
+
+    <a href={% url 'usuarios_equipo' 1 %}>usuarios 1</a><br>
+
+    <a href={% url 'mostar_equipo' 1 %}>equipos id equipo</a><br>
+
+    <a href={% url 'lista_deportes' %}>lista_deportes</a><br>
+
+    <a href={% url 'usuarios_mayores' 400 %}>usuarios_mayores</a><br>
+
+    <a href={% url 'ubicacion_cubierta_deporte' 1 %}>ubicacion_cubierta_deporte</a><br>
+
+    <a href={% url 'usuarios_deporte' 1 %}>usuarios_deporte</a><br>
+
+    <a href={% url 'buscador_calle' 'hola' %}>Buscador calle</a><br>
+
+    <a href={% url 'equipo_deporte_menos_jugadores' 1 10%}>equipo_deporte_menos_jugadores 1 10</a><br>
+
+    <a href={% url 'jugador_libre' %}>jugador_libre</a><br>
+
+
+</body>
+</html>

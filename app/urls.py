@@ -1,0 +1,17 @@
+from django.contrib import admin
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.indice, name='indice'),
+    path('usuarios', views.listar_usuarios, name='listar_usuarios'),
+    path('usuarios/<str:equipo>', views.usuarios_equipo, name='usuarios_equipo'),
+    path('equipos/<int:id_equipo>', views.mostar_equipo, name='mostar_equipo'),
+    path('lista_deportes', views.lista_deportes, name='lista_deportes'),
+    path('usuarios_mayores/<int:edad>', views.usuarios_mayores, name='usuarios_mayores'),
+    path('ubicacion_cubierta/<str:deporte>', views.ubicacion_cubierta_deporte,name='ubicacion_cubierta_deporte'),
+    path('usuarios/<str:deporte>',views.usuarios_deporte,name='usuarios_deporte'),
+    path('buscador_calle/<str:palabra>', views.buscador_calle, name='buscador_calle'),
+    path('equipo/<str:deporte>/<int:numero>', views.equipo_deporte_menos_jugadores, name='equipo_deporte_menos_jugadores'),
+    path('jugador_libre', views.jugador_libre, name='jugador_libre'),
+]

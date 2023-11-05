@@ -86,7 +86,7 @@ class Ubicacion(models.Model):
 
 
 class Detalles_Ubicacion(models.Model):
-    models.OneToOneField(Ubicacion, verbose_name=("ubicacion"), on_delete=models.CASCADE)
+    ubicacion  = models.OneToOneField(Ubicacion, verbose_name=("ubicacion"), on_delete=models.CASCADE)
     incidentes = models.BooleanField()
     cubierto = models.BooleanField()
 
@@ -97,6 +97,9 @@ class Perfil_Publico(models.Model):
     lugar_fav = models.ForeignKey(Ubicacion, verbose_name=("lugar_fav"), on_delete=models.CASCADE)
     deportes_fav = models.TextField()
     hitos_publicos = models.TextField()
+    #me faltaba la relacion con usuarios
+    usuarios = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
+    
 #lugar_fav y deportes_fav deberia ser una lista elegible de Ubicacion y Deportes respectivamente
     
     
