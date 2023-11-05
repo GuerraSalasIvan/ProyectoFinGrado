@@ -95,3 +95,17 @@ def jugador_libre(request):
     usuario = Usuarios.objects.filter(rel_usu_equi=None).all()
     
     return render(request, 'usuario/listar_usuarios.html',{jugador_libre:usuario})
+
+
+#Páginas de Error
+def mi_error_400(request,exception=None):
+    return render(request, 'errores/400.html',None,None,400)
+
+def mi_error_403(request,exception=None):
+    return render(request, 'errores/403.html',None,None,403)
+
+def mi_error_404(request,exception=None):
+    return render(request, 'errores/404.html',None,None,404)
+
+def mi_error_500(request,exception=None):
+    return render(request, 'errores/500.html',None,None,500)
