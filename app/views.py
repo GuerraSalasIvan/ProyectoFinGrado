@@ -20,7 +20,7 @@ def listar_usuarios(request):
 Listado de todos los usuarios que practiquen un deporte en concreto, dado el nombre del deporte
 '''
 def usuarios_equipo(request, equipo):
-    usuarios = Rel_Usu_Equi.objects.select_related('usuarios').select_related('equipos').filter(equipos=equipo).all()
+    usuarios = Rel_Usu_Equi.objects.select_related('usuario').select_related('equipos').filter(equipos=equipo).all()
     
     return render(request, 'usuario/usuarios_equipo.html', {"usuarios_equipo":usuarios})
 
@@ -49,7 +49,7 @@ Mostar los usuarios mayores de cierta edad pasada como paramentro
 def usuarios_mayores(request, edad):
     usuarios = Usuarios.objects.filter(edad__gt=edad).all()
     
-    return render(request, 'usuario/listar_usuarios.html',{"usuarios_mayores":usuarios})
+    return render(request, 'usuario/listar_usuarios.html',{"listar_usuarios":usuarios})
 
 '''
 Queremos las ubicaciones disponibles y tachadas para practicar x deporte
@@ -90,11 +90,10 @@ def equipo_deporte_menos_jugadores(request, deporte, numero):
 '''
 Devoler jugadores sin asignar a ningun equipo
 '''
-
 def jugador_libre(request):
     usuario = Usuarios.objects.filter(rel_usu_equi=None).all()
     
-    return render(request, 'usuario/listar_usuarios.html',{"jugador_libre":usuario})
+    return render(request, 'usuario/listar_usuarios.html',{"listar_usuarios":usuario})
 
 
 #Páginas de Error

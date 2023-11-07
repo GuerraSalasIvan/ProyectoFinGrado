@@ -1,1 +1,19 @@
+<html>
+    <body>
+
+        {% for rel_usuario in usuarios_equipo %}
+            <div>
+                <h2>Usuarios: {{ rel_usuario.usuario.nombre }}</h2>
+                <h2>Equipos: {{ rel_usuario.equipos.nombre }}</h2>
+           
+    
+                <p>-----------------------------------------------------------------------</p>
+                <br>
+    
+            </div>
+        {% endfor %}
+    </body>
+</html>
+
+
 usuarios_equipo

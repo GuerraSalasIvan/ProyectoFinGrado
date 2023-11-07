@@ -6,3 +6,4 @@ from .models import *
 admin.site.register(Usuarios)
 admin.site.register(Categoria_Persona)
 admin.site.register(Deportes)
+admin.site.register(Rel_Usu_Equi)
