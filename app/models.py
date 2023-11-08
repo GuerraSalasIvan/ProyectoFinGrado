@@ -70,8 +70,9 @@ class Equipos(models.Model):
      )
     
     deporte = models.ForeignKey(Deportes, verbose_name=("deporte"), on_delete=models.CASCADE)
-    
+    usuario_valoracion = models.ManyToManyField(Usuarios, through="Votacion", related_name="votacion_usuario")   
     usurio = models.ManyToManyField(Usuarios, through="Rel_Usu_Equi", related_name="usuario_equipo")   
+    
 #Necesito validar el numero maximo de jugadores en funcion al deporte
 
 
@@ -126,3 +127,29 @@ class Rel_Dep_Ubi(models.Model):
     deporte = models.ForeignKey(Deportes, verbose_name=("deporte"), on_delete=models.CASCADE)
     
     equipos = models.ForeignKey(Equipos, verbose_name=("equipos"), on_delete=models.CASCADE) 
+
+class Votacion(models.Model):
+    puntuacion = models.IntegerField(default=0)
+    comentario = models.CharField(max_length=400)
+    fecha = models.DateTimeField(default=timezone.now)
+    
+    usuarios = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    equipos = models.ForeignKey(Equipos, on_delete=models.CASCADE)
+    
+
+class CuentaBancaria(models.Model):
+    BANCOS = [('Caixa','Caixa'), 
+              ('BBVA','BBVA'), 
+              ('UNICAJA','UNICAJA'),
+              ('ING','ING')]
+    
+    nombre = models.CharField(
+        choices=BANCOS,
+        max_length=10
+        
+    )
+    
+    
+    numero_cuenta  = models.IntegerField()
+    
+    usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)

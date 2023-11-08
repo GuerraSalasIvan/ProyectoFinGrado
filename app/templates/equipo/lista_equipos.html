@@ -1,1 +1,13 @@
-lista_equipos
+<html>
+    <body>
+        {% for equipos in mostar_equipo %}
+            <div>
+                <h2>Nombre: {{ equipos.nombre }}</h2> 
+    
+                <p>-----------------------------------------------------------------------</p>
+                <br>
+    
+            </div>
+        {% endfor %}
+    </body>
+</html>

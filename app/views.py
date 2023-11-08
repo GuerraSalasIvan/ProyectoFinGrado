@@ -96,6 +96,8 @@ def jugador_libre(request):
     return render(request, 'usuario/listar_usuarios.html',{"listar_usuarios":usuario})
 
 
+
+
 #Páginas de Error
 def mi_error_400(request,exception=None):
     return render(request, 'errores/400.html',None,None,400)
