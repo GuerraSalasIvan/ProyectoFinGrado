@@ -14,4 +14,9 @@ urlpatterns = [
     path('buscador_calle/<str:palabra>', views.buscador_calle, name='buscador_calle'),
     path('equipo/<str:deporte>/<int:numero>', views.equipo_deporte_menos_jugadores, name='equipo_deporte_menos_jugadores'),
     path('jugador_libre', views.jugador_libre, name='jugador_libre'),
+    path('ultimo_voto/<int:id_equipo>', views.ultimo_voto_equipo, name='ultimo_voto_equipo'),   
+    path('equipos_votos/<int:id_usuario>',views.equipos_votos_superior_3_usuario, name='equipos_votos_superior_3_usuario') ,
+    path('usuario_sin_voto', views.usuario_sin_voto, name='usuario_sin_voto'),
+    path('cuentas_con_texto/<str:texto>', views.cuentas_con_texto, name='cuentas_con_texto'),
+    path('media_votacion_superior', views.media_votacion_superior, name='media_votacion_superior'),
 ]

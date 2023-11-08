@@ -1,0 +1,20 @@
+<html>
+    <body>
+        {% for cuenta in  listar_cuentas %}
+        
+        <div>
+                <h1>Nombre Banco: {{ cuenta.nombre }}</h1>
+                
+                <h2>Numero aunq no es bueno mostrar esto: {{ cuenta.numero }}</h2> 
+
+                <h2>Usuario: {{ cuenta.usuario.nombre }}</h2>
+    
+                <p>-----------------------------------------------------------------------</p>
+                <br>
+    
+            </div>
+
+        {% endfor %}
+            
+    </body>
+</html>
