@@ -1,5 +1,7 @@
-<html>
-    <body>
+{% extends "estructura/principal.html" %}
+
+{% block contenido %}
+
         {% for cuenta in  listar_cuentas %}
         
         <div>
@@ -15,6 +17,7 @@
             </div>
 
         {% endfor %}
+{% endblock contenido %}
+
+
             
-    </body>
-</html>

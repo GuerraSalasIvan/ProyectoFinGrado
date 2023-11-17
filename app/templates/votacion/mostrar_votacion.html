@@ -1,16 +1,10 @@
-<html>
-    <body>
+{% extends "estructura/principal.html" %}
+
+{% block contenido %} 
         <h1>Ultimo comentario</h1>
 
             <div>
-                <h2>Comentario: {{ mostrar_votacion.comentario }}</h2> 
-                <h2>Puntacion: {{ mostrar_votacion.puntuacion }}</h2> 
-
-                <h2>Usuario: {{ mostrar_votacion.usuarios.nombre }}</h2>
-    
-                <p>-----------------------------------------------------------------------</p>
-                <br>
-    
+                {% include "votacion/votacion.html" %} 
             </div>
-    </body>
-</html>
+{% endblock contenido %}
+

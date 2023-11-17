@@ -105,7 +105,7 @@ def ultimo_voto_equipo(request, id_equipo):
               .order_by('-fecha')[:1]
               .get())
     
-    return render(request, 'votacion/mostrar_votacion.html',{"mostrar_votacion":votacion})
+    return render(request, 'votacion/mostrar_votacion.html',{"voto":votacion})
 
 
 '''

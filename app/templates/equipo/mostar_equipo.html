@@ -1,12 +1,14 @@
-<html>
-    <body>
+{% extends "estructura/principal.html" %}
 
-            <div>
+{% block contenido %} 
+        <div>
                 <h2>Nombre: {{ mostar_equipo.nombre }}</h2> 
     
                 <p>-----------------------------------------------------------------------</p>
                 <br>
     
             </div>
-    </body>
-</html>
+
+{% endblock contenido %}
+
+    

@@ -1,5 +1,8 @@
-<html>
-    <body>
+
+
+{% extends "estructura/principal.html" %}
+
+{% block contenido %} 
         {% for usuario in listar_usuarios %}
             <div>
                 <h2>Nombre: {{ usuario.nombre }}</h2>
@@ -13,8 +16,5 @@
     
             </div>
         {% endfor %}
-    </body>
-</html>
-
-listar_usuarios
+{% endblock contenido %}
 

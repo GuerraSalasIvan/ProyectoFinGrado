@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<h1>Hola</h1>
+
+
+	<a href={% url 'listar_usuarios' %}>listar_usuarios</a><br>
+
+    <a href={% url 'usuarios_equipo' 4 %}>usuarios 4</a><br>
+
+    <a href={% url 'mostar_equipo' 1 %}>equipos id equipo</a><br>
+
+    <a href={% url 'lista_deportes' %}>lista_deportes</a><br>
+
+    <a href={% url 'usuarios_mayores' 400 %}>usuarios_mayores</a><br>
+
+    <a href={% url 'ubicacion_cubierta_deporte' 1 %}>ubicacion_cubierta_deporte</a><br>
+
+    <a href={% url 'usuarios_deporte' 1 %}>usuarios_deporte</a><br>
+
+    <a href={% url 'buscador_calle' 'hola' %}>Buscador calle</a><br>
+
+    <a href={% url 'equipo_deporte_menos_jugadores' 1 10%}>equipo_deporte_menos_jugadores 1 10</a><br>
+
+    <a href={% url 'jugador_libre' %}>jugador_libre</a><br>
+    <br>
+    <br>
+    <h1>Las views del examen</h1>
+
+    <a href={% url 'ultimo_voto_equipo' 2 %}>ultimo_voto_equipo del equipo 2</a><br>
+
+    <a href={% url 'equipos_votos_superior_3_usuario' 1 %}>equipos_votos_superior_3_usuario del usuario 1</a><br>
+
+    <a href={% url 'usuario_sin_voto' %}>usuario_sin_voto</a><br>
+
+    <a href={% url 'cuentas_con_texto' "juan"%}>cuentas_con_texto "juan"</a><br>
+
+    <a href={% url 'media_votacion_superior' %}>media_votacion_superior </a><br>
+    
+
+    
+
+</body>
+</html>

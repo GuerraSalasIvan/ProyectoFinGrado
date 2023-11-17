@@ -1,21 +1,13 @@
-<html>
-    <body>
+{% extends "estructura/principal.html" %}
+
+{% block contenido %} 
         {% for voto in  listar_votacion %}
         
         <div>
-                <h1>Equipo: {{ voto.equipos.nombre }}</h1>
-                
-                <h2>Comentario: {{ voto.comentario }}</h2> 
-                <h2>Puntacion: {{ voto.puntuacion }}</h2> 
-
-                <h2>Usuario: {{ voto.usuarios.nombre }}</h2>
-    
-                <p>-----------------------------------------------------------------------</p>
-                <br>
-    
-            </div>
+                {% include "votacion/votacion.html" %}    
+        </div>
 
         {% endfor %}
+{% endblock contenido %}
+
             
-    </body>
-</html>
