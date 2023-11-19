@@ -1,2 +1,15 @@
 {% extends "estructura/principal.html" %}
+{% load static %}
 
+<link rel="stylesheet" href="{% static 'css/pie.css' %}">
+
+{% block contenido %} 
+<div>
+    <h2>Nombre: {{ mostar_equipo.nombre }}</h2> 
+
+    <p>-----------------------------------------------------------------------</p>
+    <br>
+
+</div>
+
+{% endblock contenido %}

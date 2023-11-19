@@ -1,1 +1,12 @@
-lista_deportes
+{% extends "estructura/principal.html" %}
+
+{% block contenido %} 
+<div>
+
+    {% for deporte in lista_deportes %}
+        <h1>Deporte: {{ deporte.deporte }}</h1>
+    
+    {% endfor %}
+
+</div>
+{% endblock contenido %}
