@@ -19,4 +19,5 @@ urlpatterns = [
     path('usuario_sin_voto', views.usuario_sin_voto, name='usuario_sin_voto'),
     path('cuentas_con_texto/<str:texto>', views.cuentas_con_texto, name='cuentas_con_texto'),
     path('media_votacion_superior', views.media_votacion_superior, name='media_votacion_superior'),
+    path('crear_equipo', views.equipo_create, name='crear_equipo'),
 ]

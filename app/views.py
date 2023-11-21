@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Q, Prefetch, Avg
 from .models import *
+from .forms import *
+from django.contrib import messages
 
 # Create your views here.
 
@@ -154,6 +156,56 @@ def media_votacion_superior(request):
               .filter(puntuacion__avg__gte=2.5).all())
     
     return render(request, 'votacion/media_votacion.html',{'listar_votacion':votacion})
+
+
+
+
+'''
+Formulario
+'''
+
+def equipo_create(request):
+    datosFormulario = None
+    if request.method == "POST":
+        datosFormulario = request.POST
+    formulario = EquiposModelForms(datosFormulario)
+
+    if (request.method == "POST"):
+         equipo_creado = crear_equipo_modelo(formulario)
+         
+         if(equipo_creado):
+            messages.success(request, 'Se ha creado el equipo'+formulario.cleaned_data.get('nombre')+" correctamente")
+            
+            return redirect("crear_equipo")
+        
+    return render(request, 'equipo/crear.html',{"formulario":formulario})
+
+
+def crear_equipo_modelo(formulario):
+    equipo_creado = False
+    
+    if formulario.is_valid():
+        equipo = Equipos.objects.create(
+            nombre = formulario.cleaned_data.get('nombre'),
+            capacidad = formulario.cleaned_data.get('capacidad'),
+            deporte= formulario.cleaned_data.get('deporte'),
+        )
+        
+        equipo.usuario_valoracion.set(formulario.cleaned_data.get('usuario_valoracion'))
+        
+        equipo.usurio.set(formulario.cleaned_data.get('usurio'))
+        
+        try:
+            # Guarda el equipo en la base de datos
+            equipo.save()
+            equipo_creado = True
+        except Exception as error:
+            print(error)
+    return equipo_creado
+
+
+
+
 
 #Páginas de Error
 def mi_error_400(request,exception=None):

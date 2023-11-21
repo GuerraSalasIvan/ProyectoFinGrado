@@ -1,9 +1,14 @@
 li{
     list-style: none;
+    color: black;
 }
 
 ul{
     display: grid;
-    grid-template-rows: 40px 40px;
-    grid-template-columns: repeat(8, auto);
+    grid-template-rows: 40px 40px 40px;
+    grid-template-columns: repeat(6, auto);
+}
+
+nav{
+    background-color: #7a7a7a ;
 }

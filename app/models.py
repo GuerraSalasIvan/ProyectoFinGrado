@@ -62,11 +62,7 @@ class Deportes(models.Model):
 class Equipos(models.Model):
     nombre = models.CharField(max_length=60)
     capacidad = models.IntegerField(
-        default=1,
-        validators=[
-            MaxValueValidator(20),
-            MinValueValidator(1)
-        ]
+        default=1
      )
     
     deporte = models.ForeignKey(Deportes, verbose_name=("deporte"), on_delete=models.CASCADE)
