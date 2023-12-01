@@ -1,4 +1,5 @@
 from django.forms import ModelForm
+from django import forms
 from .models import *
 
 class EquiposModelForms(ModelForm):
@@ -42,4 +43,6 @@ class EquiposModelForms(ModelForm):
         if(capacidad > 20):
             self.add_error('capacidad','No puede haber mas de 20 miembros')
             
-   
+class BusquedaEquipoForm(forms.Form):
+    textoBusqueda = forms.CharField(required=False)
+    

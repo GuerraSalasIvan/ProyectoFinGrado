@@ -203,6 +203,23 @@ def crear_equipo_modelo(formulario):
             print(error)
     return equipo_creado
 
+def buscar_equipo(request):
+    formulario = BusquedaEquipoForm(request.POST)
+
+    if formulario.is_valid():
+        texto = formulario.cleaned_data.get('nombre'),
+
+        equipos = Equipos.objects.select_related('deporte').prefetch_related('usurio').filter(nombre__contains=texto).all()
+        
+        mensaje_busqueda =  "Se buscar por equipos que contienen en su nombre la palabra: "+ texto
+        
+        return render(request, 'equipo/lista_equipos.html',{"mostar_equipo":equipos,"texto_busqueda":mensaje_busqueda})
+    
+    if("HTTP_REFERER" in request.META):
+        return redirect(request.META["HTTP_REFERER"])
+    else:
+        return redirect("index")
+    
 
 
 

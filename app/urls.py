@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from . import views
+from .import views
 
 urlpatterns = [
     path('', views.indice, name='indice'),
@@ -20,4 +20,5 @@ urlpatterns = [
     path('cuentas_con_texto/<str:texto>', views.cuentas_con_texto, name='cuentas_con_texto'),
     path('media_votacion_superior', views.media_votacion_superior, name='media_votacion_superior'),
     path('crear_equipo', views.equipo_create, name='crear_equipo'),
+    path('buscar/equipo',views.buscar_equipo,name='buscar_equipo'),
 ]
