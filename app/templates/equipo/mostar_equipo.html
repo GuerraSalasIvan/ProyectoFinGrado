@@ -1,13 +1,17 @@
 {% extends "estructura/principal.html" %}
 
 {% block contenido %} 
-        <div>
-                <h2>Nombre: {{ mostar_equipo.nombre }}</h2> 
-    
-                <p>-----------------------------------------------------------------------</p>
-                <br>
-    
-            </div>
+
+        <div class ="row">
+
+        {% for equipo in  mostar_equipo %}
+
+                <div class="col-3 border mx-auto">
+                      {%include "equipo/equipo.html"%}
+                </div>                
+        {% endfor %}
+
+        </div>
 
 {% endblock contenido %}
 

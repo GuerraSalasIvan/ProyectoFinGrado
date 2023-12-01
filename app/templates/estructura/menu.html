@@ -5,7 +5,7 @@
 
         <li><a href={% url 'usuarios_equipo' 4 %}>usuarios 4</a> </li>
 
-        <li><a href={% url 'mostar_equipo' 1 %}>equipos id equipo</a> </li>
+        <li><a href={% url 'mostar_equipo' %}>equipos</a> </li>
 
         <li><a href={% url 'lista_deportes' %}>lista_deportes</a> </li>
 
@@ -30,8 +30,12 @@
         <li><a href={% url 'cuentas_con_texto' "juan"%}>cuentas_con_texto "juan"</a></li>
 
         <li><a href={% url 'media_votacion_superior' %}>media_votacion_superior </a></li>
+
+        <li><a href={% url 'crear_equipo' %}>Formulario </a></li>
       
-        <form action ="{% url "buscar_equipo" %}" method="post"><input ></form>
+        <form action ="{% url "buscar_equipo" %}" method="get">
+            <input type="text" name="nombre">
+        </form>
 
     </ul>
 </nav>

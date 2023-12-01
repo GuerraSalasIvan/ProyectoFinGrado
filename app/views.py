@@ -30,8 +30,8 @@ def usuarios_equipo(request, equipo):
 '''
 Mostrar un equipos en especifico por id
 '''
-def mostar_equipo(request, id_equipo):
-    equipos = Usuarios.objects.get(id=id_equipo)
+def mostar_equipo(request):
+    equipos = Equipos.objects.all()
     
     return render(request, 'equipo/mostar_equipo.html', {"mostar_equipo":equipos})
 
@@ -203,22 +203,38 @@ def crear_equipo_modelo(formulario):
             print(error)
     return equipo_creado
 
+
 def buscar_equipo(request):
-    formulario = BusquedaEquipoForm(request.POST)
+    formulario = BusquedaEquipoForm(request.GET)
 
     if formulario.is_valid():
-        texto = formulario.cleaned_data.get('nombre'),
+        texto = formulario.cleaned_data.get('nombre')
 
         equipos = Equipos.objects.select_related('deporte').prefetch_related('usurio').filter(nombre__contains=texto).all()
         
-        mensaje_busqueda =  "Se buscar por equipos que contienen en su nombre la palabra: "+ texto
+        mensaje_busqueda =  "Se buscar por equipos que contienen en su nombre la palabra: " + texto
         
-        return render(request, 'equipo/lista_equipos.html',{"mostar_equipo":equipos,"texto_busqueda":mensaje_busqueda})
+        return render(request, 'equipo/mostar_equipo.html',{"mostar_equipo":equipos,"texto_busqueda":mensaje_busqueda})
     
     if("HTTP_REFERER" in request.META):
         return redirect(request.META["HTTP_REFERER"])
     else:
         return redirect("index")
+    
+def equipo_buscar_avanzado(request):
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaEquipoForm(request.GET)
+        if formulario.is_valid():
+            mensaje_busqueda = 'Se ha buscado por los siguientes valores:\n'
+            
+            textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
+            deporte = formulario.cleaned_data.get('deporte')
+            usuario = formulario.cleaned_data.get('usuario')
+            capacidad  = formulario.cleaned_data.get('capacidad')
+            
+    else:
+        formulario = BusquedaAvanzadaEquipoForm(None)
+    return render(request, 'equipo/busqueda_avanzada.html', {'formulario':formulario})
     
 
 
