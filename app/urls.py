@@ -22,5 +22,6 @@ urlpatterns = [
     path('crear_equipo', views.equipo_create, name='crear_equipo'),
     path('buscar/equipo',views.buscar_equipo,name='buscar_equipo'),
     path('buscar_avanzado', views.equipo_buscar_avanzado, name='equipo_buscar_avanzado'),
-    path('equipo/editar/<int:equipo_id>', views.equipo_editar, name='equipo_editar')
+    path('equipo/editar/<int:equipo_id>', views.equipo_editar, name='equipo_editar'),
+    path('equipo/eliminar/<int:equipo_id>', views.equipo_eliminar, name='equipo_eliminar'),
 ]

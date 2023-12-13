@@ -269,6 +269,16 @@ def equipo_editar(request,equipo_id):
     return render(request,'equipo/actualizar.html',{'formulario':formulario, 'equipo':equipo})
 
 
+def equipo_eliminar(request,equipo_id):
+    equipo = Equipos.objects.get(id=equipo_id)
+    try:
+        equipo.delete()
+        messages.success(request, "Se ha elimnado el libro "+equipo.nombre+" correctamente")
+    except Exception as error:
+        print(error)
+    return redirect('mostar_equipo')
+
+
 #Páginas de Error
 def mi_error_400(request,exception=None):
     return render(request, 'errores/400.html',None,None,400)
