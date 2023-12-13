@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .import views
+from . import views
 
 urlpatterns = [
     path('', views.indice, name='indice'),
@@ -21,4 +21,6 @@ urlpatterns = [
     path('media_votacion_superior', views.media_votacion_superior, name='media_votacion_superior'),
     path('crear_equipo', views.equipo_create, name='crear_equipo'),
     path('buscar/equipo',views.buscar_equipo,name='buscar_equipo'),
+    path('buscar_avanzado', views.equipo_buscar_avanzado, name='equipo_buscar_avanzado'),
+    path('equipo/editar/<int:equipo_id>', views.equipo_editar, name='equipo_editar')
 ]

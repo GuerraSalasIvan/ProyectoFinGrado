@@ -1,0 +1,14 @@
+{% extends "estructura/principal.html" %}
+
+{% block contenido %} 
+{% load bootstrap5 %}
+    <form action = "{% url 'equipo_buscar_avanzado' %}" method = "GET"> 
+        
+        {% csrf_token %}
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.textoBusqueda show_label=True %}
+        </div>
+    </form>
+
+{% endblock contenido %}

@@ -224,20 +224,49 @@ def buscar_equipo(request):
 def equipo_buscar_avanzado(request):
     if(len(request.GET) > 0):
         formulario = BusquedaAvanzadaEquipoForm(request.GET)
+        
         if formulario.is_valid():
             mensaje_busqueda = 'Se ha buscado por los siguientes valores:\n'
+            
+            equipos = Equipos.objects
             
             textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
             deporte = formulario.cleaned_data.get('deporte')
             usuario = formulario.cleaned_data.get('usuario')
             capacidad  = formulario.cleaned_data.get('capacidad')
             
+            if(textoBusqueda != ""):
+                equipos = equipos.filter(Q(nombre__contains=textoBusqueda) | Q(deporte__deporte__contains=textoBusqueda))
+                mensaje_busqueda +=" Nombre o deporte que contengan la palabra "+textoBusqueda+"\n"
+            
+            equipo = equipos.all()
+            
+            return render(request, 'equipo/mostar_equipo.html', {'mostar_equipo':equipo,'textoBusqueda':textoBusqueda })
+            
     else:
         formulario = BusquedaAvanzadaEquipoForm(None)
     return render(request, 'equipo/busqueda_avanzada.html', {'formulario':formulario})
     
 
-
+def equipo_editar(request,equipo_id):
+    equipo = Equipos.objects.get(id=equipo_id)
+    
+    datosFormulario= None
+    
+    if request.method == 'POST':
+        datosFormulario = request.POST
+    
+    formulario = EquiposModelForms(datosFormulario, instance=equipo)
+    
+    if request.method == 'POST':
+        if formulario.is_valid():
+            formulario.save()
+            try:
+                formulario.save()
+                return redirect('mostar_equipo')
+            except Exception as e:
+                pass
+    return render(request,'equipo/actualizar.html',{'formulario':formulario, 'equipo':equipo})
 
 
 #Páginas de Error

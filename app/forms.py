@@ -46,18 +46,36 @@ class EquiposModelForms(ModelForm):
 class BusquedaEquipoForm(forms.Form):
     nombre = forms.CharField(required=False)
     
-    
-    
+
+
 class BusquedaAvanzadaEquipoForm(forms.Form):
     
     textoBusqueda = forms.CharField(required=False)
+
+    def clean(self):
+        super().clean()
+        
+        #Obtenemos los campos
+        textoBusqueda = self.cleaned_data.get('textoBusqueda')
+
+        if(textoBusqueda == ""):
+             self.add_error('textoBusqueda', 'no textoBusqueda')
+        
+        return self.cleaned_data
     
+
+
+    
+    
+'''
+
     deporte = forms.MultipleChoiceField(choices=Equipos.deporte, required=False, widget=forms.CheckboxSelectMultiple())
     
     usuario = forms.MultipleChoiceField(choices=Equipos.usurio, required=False, widget=forms.CheckboxSelectMultiple())
     
     capacidad = forms.MultipleChoiceField(range(1,20))
     
+
     def clean(self):
         super().clean()
         
@@ -79,4 +97,4 @@ class BusquedaAvanzadaEquipoForm(forms.Form):
             self.add_error('capacidad', 'no capacidad')
             
         return self.cleaned_data
-    
+'''

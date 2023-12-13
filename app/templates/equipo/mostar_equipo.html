@@ -4,11 +4,14 @@
 
         <div class ="row">
 
-        {% for equipo in  mostar_equipo %}
+        {% for equipo in mostar_equipo %}
 
                 <div class="col-3 border mx-auto">
                       {%include "equipo/equipo.html"%}
-                </div>                
+                <a href= "{% url 'equipo_editar' equipo.id %}"><i class="fa-solid fa-pencil"></i></a>
+                <button type="button" class="btn btn-danger">Borrar</button>  
+                </div>     
+                         
         {% endfor %}
 
         </div>
