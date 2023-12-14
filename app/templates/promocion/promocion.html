@@ -1,4 +1,6 @@
 {% load bootstrap_icons %}
+{% load static %}
+
 <div>
     <h2>Nombre: {{ promocion.nombre }}</h2> 
     <h2>Nombre: {{ promocion.descuento }}</h2> 
@@ -11,5 +13,6 @@
             <span>{% bs_icon 'trash' %}</span>
         </button> 
     </form>
+    <script type='text/javascript' src="{% static 'js/eliminar.js' %}"></script>
 
 </div>
