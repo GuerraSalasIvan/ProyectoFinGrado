@@ -1,6 +1,9 @@
 from django.forms import ModelForm
 from django import forms
 from .models import *
+from datetime import date
+import datetime
+
 
 class EquiposModelForms(ModelForm):
     class Meta:
@@ -64,7 +67,91 @@ class BusquedaAvanzadaEquipoForm(forms.Form):
         return self.cleaned_data
     
 
+class BusquedaAvanzadaPromocionForm(forms.Form):
+    
+    usuariosdisponibles=Usuarios.objects.all()
+    
+    #creamos el formulario
+    textoBusqueda = forms.CharField(required=False)
+    rangoDescuento = forms.IntegerField(required=False)
+    usuarios = forms.ModelMultipleChoiceField(queryset=usuariosdisponibles, widget=forms.SelectMultiple, required=False)
+    fecha_desde = forms.DateField(label="Fecha Desde",
+                                required=False,
+                                widget= forms.SelectDateWidget(years=range(2020,2024))
+                                )
+    
+    fecha_hasta = forms.DateField(label="Fecha Hasta",
+                                  required=False,
+                                  widget= forms.SelectDateWidget(years=range(2020,2024))
+                                  )
+    
 
+    def clean(self):
+        super().clean()
+        
+        #Obtenemos los campos
+        textoBusqueda = self.cleaned_data.get('textoBusqueda')
+        rangoDescuento = self.cleaned_data.get('rangoDescuento')
+        usuarios = self.cleaned_data.get('usuarios')
+        fecha_desde = self.cleaned_data.get('fecha_desde')
+        fecha_hasta = self.cleaned_data.get('fecha_hasta')
+
+        #al menos tiene que poner un campo
+        if(textoBusqueda == ""
+           and rangoDescuento is None
+           and len(usuarios) == 0
+           and fecha_desde is None
+           and fecha_hasta is None):
+             self.add_error('textoBusqueda', 'no textoBusqueda')
+             self.add_error('rangoDescuento', 'no rangoDescuento')
+             self.add_error('usuarios', 'no hay usuarios')
+             self.add_error('fecha_desde','Debe introducir al menos un valor en un campo del formulario')
+             self.add_error('fecha_hasta','Debe introducir al menos un valor en un campo del formulario')
+
+        #solo permitir rango de 0 a 100
+        else:
+            if (not(rangoDescuento is None) and (rangoDescuento < 0 and rangoDescuento > 100)):
+                self.add_error('rangoDescuento', 'debe estar entre 0 y 100')
+                
+                
+            if(not fecha_desde is None  and not fecha_hasta is None and fecha_hasta < fecha_desde):
+                self.add_error('fecha_desde','La fecha hasta no puede ser menor que la fecha desde')
+                self.add_error('fecha_hasta','La fecha hasta no puede ser menor que la fecha desde')
+        
+        return self.cleaned_data
+    
+    #Vamos a crear un create rapido
+class PromocionModelForm(ModelForm):
+    class Meta:
+        model = Promocion
+        fields = ['nombre','descripcion','descuento','fecha_fin_promocion','usuarios',]
+        labels = {
+            "nombre": ("Nombre promocion"),
+        }
+        widgets = {
+            "fecha_fin_promocion":forms.SelectDateWidget(),
+            
+        }
+
+    def clean(self):
+ 
+        #Validamos con el modelo actual
+        super().clean()
+        
+        nombre = self.cleaned_data.get('nombre')
+        descripcion = self.cleaned_data.get('descripcion')
+        
+        #Comprobamos que no exista una promocion con ese nombre
+        PromocionNombre = Promocion.objects.filter(nombre=nombre).first()
+        if(not PromocionNombre is None
+           ):
+             if(not self.instance is None and PromocionNombre.id == self.instance.id):
+                 pass
+             else:
+                self.add_error('nombre','Ya existe una promocion con ese nombre')
+        
+        return self.cleaned_data
+        
     
     
 '''

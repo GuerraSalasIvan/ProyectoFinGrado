@@ -12,7 +12,7 @@ urlpatterns = [
     path('ubicacion_cubierta/<str:deporte>', views.ubicacion_cubierta_deporte,name='ubicacion_cubierta_deporte'),
     path('usuarios/<str:deporte>',views.usuarios_deporte,name='usuarios_deporte'),
     path('buscador_calle/<str:palabra>', views.buscador_calle, name='buscador_calle'),
-    path('equipo/<str:deporte>/<int:numero>', views.equipo_deporte_menos_jugadores, name='equipo_deporte_menos_jugadores'),
+    path('equipo_mostrar/<str:deporte>/<int:numero>', views.equipo_deporte_menos_jugadores, name='equipo_deporte_menos_jugadores'),
     path('jugador_libre', views.jugador_libre, name='jugador_libre'),
     path('ultimo_voto/<int:id_equipo>', views.ultimo_voto_equipo, name='ultimo_voto_equipo'),   
     path('equipos_votos/<int:id_usuario>',views.equipos_votos_superior_3_usuario, name='equipos_votos_superior_3_usuario') ,
@@ -24,4 +24,8 @@ urlpatterns = [
     path('buscar_avanzado', views.equipo_buscar_avanzado, name='equipo_buscar_avanzado'),
     path('equipo/editar/<int:equipo_id>', views.equipo_editar, name='equipo_editar'),
     path('equipo/eliminar/<int:equipo_id>', views.equipo_eliminar, name='equipo_eliminar'),
+    
+    path('buscar/promocion', views.promocion_buscar_avanzado, name='promocion_buscar_avanzado'),
+    path('promocion/actualizar/<int:promocion_id>', views.editar_promociones, name='editar_promociones'),
+     path('promocion/borrar/<int:promocion_id>', views.borrar_promociones, name='borrar_promociones'),
 ]

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator,MinLengthValidator
 
 
 # Create your models here.
@@ -149,3 +149,19 @@ class CuentaBancaria(models.Model):
     numero_cuenta  = models.IntegerField()
     
     usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
+    
+    
+class Promocion(models.Model):
+    nombre = models.CharField(max_length=100, unique=True)
+    descripcion = models.CharField(
+        max_length=400,
+        validators=[MinLengthValidator(limit_value=100)])
+        
+    descuento = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
+    fecha_fin_promocion = models.DateTimeField(
+        validators=[MinValueValidator(limit_value=timezone.now())])
+    
+    usuarios = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    

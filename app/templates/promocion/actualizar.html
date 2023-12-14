@@ -3,7 +3,7 @@
 {% block contenido %}
 
 
-<form action="{% url 'equipo_editar' equipo.id %}" method = "post">
+<form action="{% url 'editar_promociones' promocion.id %}" method = "post">
 
     {% csrf_token %}
 

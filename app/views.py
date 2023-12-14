@@ -3,6 +3,7 @@ from django.db.models import Q, Prefetch, Avg
 from .models import *
 from .forms import *
 from django.contrib import messages
+from datetime import datetime
 
 # Create your views here.
 
@@ -257,7 +258,6 @@ def equipo_editar(request,equipo_id):
         datosFormulario = request.POST
     
     formulario = EquiposModelForms(datosFormulario, instance=equipo)
-    
     if request.method == 'POST':
         if formulario.is_valid():
             formulario.save()
@@ -277,6 +277,97 @@ def equipo_eliminar(request,equipo_id):
     except Exception as error:
         print(error)
     return redirect('mostar_equipo')
+    
+
+
+
+
+
+def promocion_buscar_avanzado(request):
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaPromocionForm(request.GET)
+        
+        if formulario.is_valid():
+            mensaje_busqueda = 'Se ha buscado por los siguientes valores:\n'
+            
+            promocion = Promocion.objects
+            
+            textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
+            rangoDescuento = formulario.cleaned_data.get('rangoDescuento')
+            usuarios = formulario.cleaned_data.get('usuarios')
+            fechaDesde = formulario.cleaned_data.get('fecha_desde')
+            fechaHasta = formulario.cleaned_data.get('fecha_hasta')
+       
+            
+            if(textoBusqueda != ""):
+                promocion = promocion.filter(Q(nombre__contains=textoBusqueda) | Q(descripcion__contains=textoBusqueda))
+                mensaje_busqueda +=" Nombre o deporte que contengan la palabra "+textoBusqueda+"\n"
+            
+            #filtro para que busque descuento mayor 
+            if(not rangoDescuento is None):
+                promocion = promocion.filter(descuento__gt=rangoDescuento)
+                
+            #filtros de para los usuarios, en caso de que sean mas de uno o de q sea uno
+            if(len(usuarios) > 0):
+                filtroOR = Q(usuarios = usuarios[0])
+                for usuario in usuarios[1:]:
+                    filtroOR |= Q(usuarios=usuario)
+            
+                promocion = promocion.filter(filtroOR)
+            
+            
+            #filtros de la fecha
+            if(not fechaDesde is None):
+                mensaje_busqueda +=" La fecha sea mayor a "+datetime.strftime(fechaDesde,'%d-%m-%Y')+"\n"
+                promocion = promocion.filter(fecha_fin_promocion__gte=fechaDesde)
+            
+             
+            if(not fechaHasta is None):
+                mensaje_busqueda +=" La fecha sea menor a "+datetime.strftime(fechaHasta,'%d-%m-%Y')+"\n"
+                promocion = promocion.filter(fecha_fin_promocion__lte=fechaHasta)
+                
+            promocion = promocion.all()
+            
+            return render(request, 'promocion/mostar_promocion.html', {'mostar_promocion':promocion,'textoBusqueda':textoBusqueda })
+            
+    else:
+        formulario = BusquedaAvanzadaPromocionForm(None)
+    return render(request, 'promocion/busqueda_promocion.html', {'formulario':formulario})
+
+#metodo para editar las promociones
+def editar_promociones(request, promocion_id):
+    promocion = Promocion.objects.get(id=promocion_id)
+    
+    datosFormulario=None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+        
+    formulario = PromocionModelForm(datosFormulario,instance = promocion)
+    
+    if (request.method == "POST"):
+       
+        if formulario.is_valid():
+            try:  
+                formulario.save()
+            except Exception as error:
+                print(error)
+                
+    return render(request, 'promocion/actualizar.html',{"formulario":formulario,"promocion":promocion})
+
+#borrar la promocion
+def borrar_promociones(request, promocion_id):
+    promocion = Promocion.objects.get(id=promocion_id)
+    try:
+        promocion.delete()
+        messages.success(request, "Se ha elimnado el libro "+promocion.nombre+" correctamente")
+    except Exception as error:
+        print(error)
+        #como no tengo una vista 'mostrar promocion' lo redirijo al buscador, aqui desde ahi si se pueden ver 
+    return redirect('promocion_buscar_avanzado')
+
+
+
 
 
 #Páginas de Error
