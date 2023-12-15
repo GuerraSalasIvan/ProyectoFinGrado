@@ -282,7 +282,48 @@ def equipo_eliminar(request,equipo_id):
 
 
 
+#crear modelo promocion
+def promocion_create(request):
+    datosFormulario = None
+    if request.method == "POST":
+        datosFormulario = request.POST
+    formulario = PromocionModelForm(datosFormulario)
 
+    if (request.method == "POST"):
+         promocion_creado = crear_promocion_modelo(formulario)
+         
+         if(promocion_creado):
+            messages.success(request, 'Se ha creado la promocion'+formulario.cleaned_data.get('nombre')+" correctamente")
+            
+            return redirect("crear_promocion")
+        
+    return render(request, 'promocion/crear.html',{"formulario":formulario})
+
+
+#crear promocion
+def crear_promocion_modelo(formulario):
+    promocion_creado = False
+    
+    if formulario.is_valid():
+        promocion = Promocion.objects.create(
+            nombre = formulario.cleaned_data.get('nombre'),
+            descripcion = formulario.cleaned_data.get('descripcion'),
+            descuento= formulario.cleaned_data.get('descuento'),
+            fecha_fin_promocion = formulario.cleaned_data.get('fecha_fin_promocion'),
+            usuarios = formulario.cleaned_data.get('usuarios')
+        )
+    
+        
+        try:
+            # Guarda el equipo en la base de datos
+            promocion.save()
+            promocion_creado = True
+        except Exception as error:
+            print(error)
+    return promocion_creado
+
+
+#busqueda avanzada promocion
 def promocion_buscar_avanzado(request):
     if(len(request.GET) > 0):
         formulario = BusquedaAvanzadaPromocionForm(request.GET)

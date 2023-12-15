@@ -67,6 +67,12 @@ class BusquedaAvanzadaEquipoForm(forms.Form):
         return self.cleaned_data
     
 
+
+
+
+
+#--------------------------------PROMOCION---------------------------------------------------------------------
+        
 class BusquedaAvanzadaPromocionForm(forms.Form):
     
     usuariosdisponibles=Usuarios.objects.all()
