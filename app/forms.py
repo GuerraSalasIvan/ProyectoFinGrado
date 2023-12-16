@@ -4,7 +4,7 @@ from .models import *
 from datetime import date
 import datetime
 
-
+#--------------------------------EQUIPO---------------------------------------------------------------------
 class EquiposModelForms(ModelForm):
     class Meta:
         model = Equipos
@@ -157,37 +157,145 @@ class PromocionModelForm(ModelForm):
                 self.add_error('nombre','Ya existe una promocion con ese nombre')
         
         return self.cleaned_data
+    
+    
+#--------------------------------USUARIOS---------------------------------------------------------------------
+ 
+#Create de usuarios
+class UsuarioModelForm(ModelForm):
+    class Meta:
+        model = Usuarios
+        fields = ['nombre','apellidos','edad','sexo']
+        labels = {
+            "nombre": ("Nombre usuario"),
+        }
         
-    
-    
-'''
-
-    deporte = forms.MultipleChoiceField(choices=Equipos.deporte, required=False, widget=forms.CheckboxSelectMultiple())
-    
-    usuario = forms.MultipleChoiceField(choices=Equipos.usurio, required=False, widget=forms.CheckboxSelectMultiple())
-    
-    capacidad = forms.MultipleChoiceField(range(1,20))
-    
 
     def clean(self):
+ 
+        #Validamos con el modelo actual
         super().clean()
         
-        #Obtenemos los campos
-        textoBusqueda = self.cleaned_data.get('textoBusqueda')
-        deporte = self.cleaned_data.get('deporte')
-        usuario = self.cleaned_data.get('usuario')
-        capacidad  = self.cleaned_data.get('capacidad')
-    
-        #controlar campos
-        if(textoBusqueda == ""
-            and len(deporte) == 0
-            and len(usuario) == 0
-            and capacidad == 0
-        ):
-            self.add_error('textoBusqueda', 'no textoBusqueda')
-            self.add_error('deporte', 'no deporte')
-            self.add_error('usuario', 'no usuario')
-            self.add_error('capacidad', 'no capacidad')
-            
+        nombre = self.cleaned_data.get('nombre')
+        apellidos = self.cleaned_data.get('apellidos')
+        edad=self.cleaned_data.get('edad')
+        sexo=self.cleaned_data.get('sexo')
+        
+        #Comprobamos que no exista una promocion con ese nombre
+        UsuarioNombre = Usuarios.objects.filter(nombre=nombre).first()
+        if(not UsuarioNombre is None
+           ):
+             if(not self.instance is None and UsuarioNombre.id == self.instance.id):
+                 pass
+             else:
+                self.add_error('nombre','Ya existe un usuario con ese nombre')
+        
         return self.cleaned_data
-'''
+    
+
+#--------------------------------Ubicacion---------------------------------------------------------------------
+
+#Create de Ubicacion
+class UbicacionModelForm(ModelForm):
+    class Meta:
+        model = Ubicacion
+        fields = ['nombre','capacidad','calle','equipo','deporte']
+        labels = {
+            "nombre": ("Nombre Ubicacion"),
+        }
+        
+
+    def clean(self):
+ 
+        #Validamos con el modelo actual
+        super().clean()
+        
+        nombre = self.cleaned_data.get('nombre')
+        capacidad = self.cleaned_data.get('capacidad')
+        calle=self.cleaned_data.get('calle')
+        equipo=self.cleaned_data.get('equipo')
+        deporte=self.cleaned_data.get('deporte')
+        
+        
+        #Comprobamos que no exista una ubicacion en ese calle exacta (puede en la misma calle, pero no exacta, es decir, el string entero con el numero de la calle)
+        UbicacionCalle = Ubicacion.objects.filter(calle=calle).first()
+        if(not UbicacionCalle is None
+           ):
+             if(not self.instance is None and UbicacionCalle.id == self.instance.id):
+                 pass
+             else:
+                self.add_error('nombre','Ya existe una Ubicacion en esa Calle')
+        
+        return self.cleaned_data
+        
+    
+#--------------------------------PERFIL PUBLICO---------------------------------------------------------------------
+#Create de Perfil Publico
+class PerfilPublicoModelForm(ModelForm):
+    class Meta:
+        model = Perfil_Publico
+        fields = ['descripcion','lugar_fav','deportes_fav','hitos_publicos','usuarios']
+        labels = {
+            "descripcion": ("Descripcion"),
+            "lugar_fav": ("Lugar favorito"),
+            "deportes_fav": ("Deportes favorito"),
+        }
+        
+
+    def clean(self):
+ 
+        #Validamos con el modelo actual
+        super().clean()
+        
+        descripcion = self.cleaned_data.get('descripcion')
+        lugar_fav = self.cleaned_data.get('lugar_fav')
+        deportes_fav=self.cleaned_data.get('deportes_fav')
+        hitos_publicos=self.cleaned_data.get('hitos_publicos')
+        usuarios=self.cleaned_data.get('usuarios')
+        
+        
+        #Comprobamos que no exista una ubicacion en ese calle exacta (puede en la misma calle, pero no exacta, es decir, el string entero con el numero de la calle)
+        UsuarioRepetido = Perfil_Publico.objects.filter(usuarios=usuarios).first()
+        if(not UsuarioRepetido is None
+           ):
+             if(not self.instance is None and UsuarioRepetido.id == self.instance.id):
+                 pass
+             else:
+                self.add_error('usuarios','Este usuario ya tiene un perfil publico')
+        
+        return self.cleaned_data
+
+#--------------------------------PERFIL PRIVADO---------------------------------------------------------------------
+#Create de Perfil Privado
+class PerfilPrivadoModelForm(ModelForm):
+    class Meta:
+        model = Perfil_Privado
+        fields = ['historial_trayectoria','incidencias','hitos','usuarios']
+        labels = {
+            "historial_trayectoria": ("¿En que equipos has estado anteriormente?"),
+            "incidencias": ("Incidencias"),
+            "hitos": ("Hitos"),
+        }
+        
+
+    def clean(self):
+ 
+        #Validamos con el modelo actual
+        super().clean()
+        
+        historial_trayectoria = self.cleaned_data.get('historial_trayectoria')
+        incidencias = self.cleaned_data.get('incidencias')
+        hitos=self.cleaned_data.get('hitos')
+        usuarios=self.cleaned_data.get('usuarios')
+        
+        
+        #Comprobamos que no exista una ubicacion en ese calle exacta (puede en la misma calle, pero no exacta, es decir, el string entero con el numero de la calle)
+        UsuarioRepetido = Perfil_Privado.objects.filter(usuarios=usuarios).first()
+        if(not UsuarioRepetido is None
+           ):
+             if(not self.instance is None and UsuarioRepetido.id == self.instance.id):
+                 pass
+             else:
+                self.add_error('usuarios','Este usuario ya tiene un perfil publico')
+        
+        return self.cleaned_data

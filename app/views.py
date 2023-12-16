@@ -98,6 +98,11 @@ def jugador_libre(request):
     
     return render(request, 'usuario/listar_usuarios.html',{"listar_usuarios":usuario})
 
+def mostrar_ubicacion(request):
+    ubicacion = Ubicacion.objects.all()
+    
+    return render(request, 'ubicacion/lista_ubicaciones.html',{'ubicacion_cubierta_deporte':ubicacion})
+
 
 '''
 El último voto que se realizó en un modelo principal en concreto, y mostrar el comentario, la votación e información del usuario o cliente que lo realizó.
@@ -158,12 +163,23 @@ def media_votacion_superior(request):
     
     return render(request, 'votacion/media_votacion.html',{'listar_votacion':votacion})
 
+def mostrar_perfil_publico(request):
 
+    perfil_publico = Perfil_Publico.objects.all()
+
+    return render(request, 'perfil_publico/lista_perfil_publico.html',{'perfil_publico':perfil_publico})
+
+def mostrar_perfil_privado(request):
+
+    perfil_privado = Perfil_Privado.objects.all()
+
+    return render(request, 'perfil_privado/lista_perfil_privado.html',{'perfil_privado':perfil_privado})
 
 
 '''
 Formulario
 '''
+#--------------------------------EQUIPO---------------------------------------------------------------------
 
 def equipo_create(request):
     datosFormulario = None
@@ -177,7 +193,7 @@ def equipo_create(request):
          if(equipo_creado):
             messages.success(request, 'Se ha creado el equipo'+formulario.cleaned_data.get('nombre')+" correctamente")
             
-            return redirect("crear_equipo")
+            return redirect("mostar_equipo")
         
     return render(request, 'equipo/crear.html',{"formulario":formulario})
 
@@ -280,8 +296,7 @@ def equipo_eliminar(request,equipo_id):
     
 
 
-
-
+#--------------------------------promocion---------------------------------------------------------------------
 #crear modelo promocion
 def promocion_create(request):
     datosFormulario = None
@@ -310,7 +325,7 @@ def crear_promocion_modelo(formulario):
             descripcion = formulario.cleaned_data.get('descripcion'),
             descuento= formulario.cleaned_data.get('descuento'),
             fecha_fin_promocion = formulario.cleaned_data.get('fecha_fin_promocion'),
-            usuarios = formulario.cleaned_data.get('usuarios')
+            promocions = formulario.cleaned_data.get('promocions')
         )
     
         
@@ -335,7 +350,7 @@ def promocion_buscar_avanzado(request):
             
             textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
             rangoDescuento = formulario.cleaned_data.get('rangoDescuento')
-            usuarios = formulario.cleaned_data.get('usuarios')
+            promocions = formulario.cleaned_data.get('promocions')
             fechaDesde = formulario.cleaned_data.get('fecha_desde')
             fechaHasta = formulario.cleaned_data.get('fecha_hasta')
        
@@ -348,11 +363,11 @@ def promocion_buscar_avanzado(request):
             if(not rangoDescuento is None):
                 promocion = promocion.filter(descuento__gt=rangoDescuento)
                 
-            #filtros de para los usuarios, en caso de que sean mas de uno o de q sea uno
-            if(len(usuarios) > 0):
-                filtroOR = Q(usuarios = usuarios[0])
-                for usuario in usuarios[1:]:
-                    filtroOR |= Q(usuarios=usuario)
+            #filtros de para los promocions, en caso de que sean mas de uno o de q sea uno
+            if(len(promocions) > 0):
+                filtroOR = Q(promocions = promocions[0])
+                for promocion in promocions[1:]:
+                    filtroOR |= Q(promocions=promocion)
             
                 promocion = promocion.filter(filtroOR)
             
@@ -401,13 +416,250 @@ def borrar_promociones(request, promocion_id):
     promocion = Promocion.objects.get(id=promocion_id)
     try:
         promocion.delete()
-        messages.success(request, "Se ha elimnado el libro "+promocion.nombre+" correctamente")
+        messages.success(request, "Se ha elimnado la promocion "+promocion.nombre+" correctamente")
     except Exception as error:
         print(error)
         #como no tengo una vista 'mostrar promocion' lo redirijo al buscador, aqui desde ahi si se pueden ver 
     return redirect('promocion_buscar_avanzado')
 
 
+#--------------------------------USUARIOS---------------------------------------------------------------------
+#crear modelo usuario
+def usuario_create(request):
+    datosFormulario = None
+    if request.method == "POST":
+        datosFormulario = request.POST
+    formulario = UsuarioModelForm(datosFormulario)
+
+    if (request.method == "POST"):
+         usuario_creado = crear_usuario_modelo(formulario)
+         
+         if(usuario_creado):
+            messages.success(request, 'Se ha creado el usuario'+formulario.cleaned_data.get('nombre')+" correctamente")
+            
+            return redirect("listar_usuarios")
+        
+    return render(request, 'usuario/crear.html',{"formulario":formulario})
+
+
+
+#crear usuario
+def crear_usuario_modelo(formulario):
+    usuario_creado = False
+    
+    if formulario.is_valid():
+        usuario = Usuarios.objects.create(
+            nombre = formulario.cleaned_data.get('nombre'),
+            apellidos = formulario.cleaned_data.get('apellidos'),
+            edad= formulario.cleaned_data.get('edad'),
+            sexo = formulario.cleaned_data.get('sexo'),
+        )
+        try:
+            # Guarda el equipo en la base de datos
+            usuario.save()
+            usuario_creado = True
+        except Exception as error:
+            print(error)
+    return usuario_creado
+
+
+#busqueda avanzada usuario
+def usuario_buscar_avanzado(request):
+    pass
+
+#metodo para editar los usuarios
+def editar_usuarios(request, usuario_id):
+    pass
+
+#borrar usuario
+def borrar_usuarios(request, usuario_id):
+    usuario = Usuarios.objects.get(id=usuario_id)
+    try:
+        usuario.delete()
+        messages.success(request, "Se ha elimnado el usuario "+usuario.nombre+" correctamente")
+    except Exception as error:
+        print(error)
+        #como no tengo una vista 'mostrar usuario' lo redirijo al buscador, aqui desde ahi si se pueden ver 
+    return redirect('listar_usuarios')
+
+
+#--------------------------------UBICACION---------------------------------------------------------------------
+#crear modelo ubicacion
+def ubicacion_create(request):
+    datosFormulario = None
+    if request.method == "POST":
+        datosFormulario = request.POST
+    formulario = UbicacionModelForm(datosFormulario)
+
+    if (request.method == "POST"):
+         ubicacion_creado = crear_ubicacion_modelo(formulario)
+         
+         if(ubicacion_creado):
+            messages.success(request, 'Se ha creado el ubicacion'+formulario.cleaned_data.get('nombre')+" correctamente")
+            
+            return redirect("listar_ubicacion")
+        
+    return render(request, 'ubicacion/crear.html',{"formulario":formulario})
+
+
+#crear ubicacion
+def crear_ubicacion_modelo(formulario):
+    ubicacion_creado = False
+    
+    if formulario.is_valid():
+        ubicacion = Ubicacion.objects.create(
+            nombre = formulario.cleaned_data.get('nombre'),
+            capacidad = formulario.cleaned_data.get('capacidad'),
+            calle = formulario.cleaned_data.get('calle'),
+            
+        )
+        #Añadir los equipos y deportes (manyToMany)
+        ubicacion.equipo.set(formulario.cleaned_data.get('equipo'))
+        ubicacion.deporte.set(formulario.cleaned_data.get('deporte'))
+        
+        try:
+            # Guarda el equipo en la base de datos
+            ubicacion.save()
+            ubicacion_creado = True
+        except Exception as error:
+            print(error)
+    return ubicacion_creado
+
+#busqueda avanzada ubicacion
+def ubicacion_buscar_avanzado(request):
+    pass
+
+#metodo para editar las ubicaciones
+def editar_ubicacion(request, ubicacion_id):
+    pass
+
+#borrar ubicacion
+def borrar_ubicacion(request, ubicacion_id):
+    ubicacion = Ubicacion.objects.get(id=ubicacion_id)
+    try:
+        ubicacion.delete()
+        messages.success(request, "Se ha elimnado la ubicacion "+ubicacion.nombre+" correctamente")
+    except Exception as error:
+        print(error)
+        #como no tengo una vista 'mostrar ubicacion' lo redirijo al buscador, aqui desde ahi si se pueden ver 
+    return redirect('listar_ubicacion')
+
+#--------------------------------PERFIL PUBLICO---------------------------------------------------------------------
+#crear modelo perfil_publico
+def perfil_publico_create(request):
+    datosFormulario = None
+    if request.method == "POST":
+        datosFormulario = request.POST
+    formulario = PerfilPublicoModelForm(datosFormulario)
+
+    if (request.method == "POST"):
+         perfil_publico_creado = crear_perfil_publico_modelo(formulario)
+         
+         if(perfil_publico_creado):
+            messages.success(request, 'Se ha creado el perfil_publico de '+str(formulario.cleaned_data.get('usuarios'))+" correctamente")
+            
+            return redirect("listar_perfil_publico")
+        
+    return render(request, 'perfil_publico/crear.html',{"formulario":formulario})
+
+
+#crear perfil_publico
+def crear_perfil_publico_modelo(formulario):
+    perfil_publico_creado = False
+    
+    if formulario.is_valid():
+        perfil_publico = Perfil_Publico.objects.create(
+            descripcion = formulario.cleaned_data.get('descripcion'),
+            lugar_fav = formulario.cleaned_data.get('lugar_fav'),
+            deportes_fav = formulario.cleaned_data.get('deportes_fav'),
+            hitos_publicos = formulario.cleaned_data.get('hitos_publicos'),
+            usuarios = formulario.cleaned_data.get('usuarios'), 
+        )
+
+        
+        try:
+            # Guarda el equipo en la base de datos
+            perfil_publico.save()
+            perfil_publico_creado = True
+        except Exception as error:
+            print(error)
+    return perfil_publico_creado
+
+#busqueda avanzada perfil_publico
+def perfil_publico_buscar_avanzado(request):
+    pass
+
+def editar_perfil_publico(request):
+    pass
+
+#borrar perfil_publico
+def borrar_perfil_publico(request, perfil_publico_id):
+    perfil_publico = Perfil_Publico.objects.get(id=perfil_publico_id)
+    try:
+        perfil_publico.delete()
+        messages.success(request, "Se ha elimnado el perfil publico de "+perfil_publico.usuarios+" correctamente")
+    except Exception as error:
+        print(error)
+        #como no tengo una vista 'mostrar perfil_publico' lo redirijo al buscador, aqui desde ahi si se pueden ver 
+    return redirect('listar_perfil_publico')
+
+#--------------------------------PERFIL PRIVADO---------------------------------------------------------------------
+#crear modelo perfil_privado
+def perfil_privado_create(request):
+    datosFormulario = None
+    if request.method == "POST":
+        datosFormulario = request.POST
+    formulario = PerfilPrivadoModelForm(datosFormulario)
+
+    if (request.method == "POST"):
+         perfil_privado_creado = crear_perfil_privado_modelo(formulario)
+         
+         if(perfil_privado_creado):
+            messages.success(request, 'Se ha creado el perfil_privado de '+str(formulario.cleaned_data.get('usuarios'))+" correctamente")
+            
+            return redirect("listar_perfil_privado")
+        
+    return render(request, 'perfil_privado/crear.html',{"formulario":formulario})
+
+
+#crear perfil_privado
+def crear_perfil_privado_modelo(formulario):
+    perfil_privado_creado = False
+    
+    if formulario.is_valid():
+        perfil_privado = Perfil_Privado.objects.create(
+            historial_trayectoria = formulario.cleaned_data.get('historial_trayectoria'),
+            incidencias = formulario.cleaned_data.get('incidencias'),
+            hitos = formulario.cleaned_data.get('hitos'),
+            usuarios = formulario.cleaned_data.get('usuarios'),
+        )
+        
+        try:
+            # Guarda el equipo en la base de datos
+            perfil_privado.save()
+            perfil_privado_creado = True
+        except Exception as error:
+            print(error)
+    return perfil_privado_creado
+
+#busqueda avanzada perfil_privado
+def perfil_privado_buscar_avanzado(request):
+    pass
+
+def editar_perfil_privado(request):
+    pass
+
+
+#borrar perfil_privado
+def borrar_perfil_privado(request, perfil_privado_id):
+    perfil_privado = Perfil_Privado.objects.get(id=perfil_privado_id)
+    try:
+        perfil_privado.delete()
+        messages.success(request, "Se ha elimnado el perfil privado de "+perfil_privado.usuarios+" correctamente")
+    except Exception as error:
+        print(error)
+        #como no tengo una vista 'mostrar perfil_privado' lo redirijo al buscador, aqui desde ahi si se pueden ver 
+    return redirect('listar_perfil_privado')
 
 
 

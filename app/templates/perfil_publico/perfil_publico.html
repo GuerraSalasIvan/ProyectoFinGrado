@@ -1,0 +1,21 @@
+{% load bootstrap_icons %}
+{% load static %}
+
+<div>
+    
+    <h2>usuario: {{ perfil_publico.usuarios }}</h2> 
+    <h2>descripcion: {{ perfil_publico.descripcion }}</h2> 
+    <h2>lugar favorito: {{ perfil_publico.lugar_fav }}</h2> 
+
+    
+    <a href= "{% url 'editar_perfil_publico' perfil_publico.id %}"><i class="fa-solid fa-pencil"></i></a>
+
+    <form action = "{% url 'borrar_perfil_publico' perfil_publico.id %}" method = "post"> 
+        {% csrf_token %}
+        <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+            <span>{% bs_icon 'trash' %}</span>
+        </button> 
+    </form>
+    <script type='text/javascript' src="{% static 'js/eliminar.js' %}"></script>
+
+</div>

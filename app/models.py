@@ -22,6 +22,9 @@ class Usuarios(models.Model):
         default = '---'
     )
     
+    def __str__(self):
+        return self.nombre
+    
 
 class Categoria_Persona(models.Model):
     CATEGORIA = [
@@ -103,7 +106,8 @@ class Perfil_Publico(models.Model):
 class Perfil_Privado(models.Model):
     historial_trayectoria = models.TextField()
     incidencias = models.TextField()
-    hitos = models.TextField()  
+    hitos = models.TextField() 
+    usuarios = models.OneToOneField(Usuarios, on_delete=models.CASCADE) 
 #En hitos se debe guardar todas las hazañas del jugador, llega a x división x año, entra en x equipo, juega durante x tiempo en x equipo, y hitos_publicos el jugadore decide que hitos hacer públicos.
 
 

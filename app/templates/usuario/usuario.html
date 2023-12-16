@@ -1,0 +1,18 @@
+{% load bootstrap_icons %}
+{% load static %}
+
+<div>
+    <h2>Nombre: {{ usuarios.nombre }}</h2> 
+    <h2>Nombre: {{ usuarios.descuento }}</h2> 
+
+    <a href= "{% url 'editar_usuarios' usuarios.id %}"><i class="fa-solid fa-pencil"></i></a>
+
+    <form action = "{% url 'borrar_usuarios' usuarios.id %}" method = "post"> 
+        {% csrf_token %}
+        <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+            <span>{% bs_icon 'trash' %}</span>
+        </button> 
+    </form>
+    <script type='text/javascript' src="{% static 'js/eliminar.js' %}"></script>
+
+</div>
