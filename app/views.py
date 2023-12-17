@@ -577,7 +577,52 @@ def crear_ubicacion_modelo(formulario):
 
 #busqueda avanzada ubicacion
 def ubicacion_buscar_avanzado(request):
-    pass
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaUbicacionForm(request.GET)
+        
+        if formulario.is_valid():
+            mensaje_busqueda = 'Se ha buscado por los siguientes valores:\n'
+            
+            ubicacion = Ubicacion.objects
+            
+            textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
+            capacidad = formulario.cleaned_data.get('capacidad')
+            calle = formulario.cleaned_data.get('calle')
+            equipo = formulario.cleaned_data.get('equipo')
+            deporte = formulario.cleaned_data.get('deporte')
+       
+            
+            if(textoBusqueda != ""):
+                ubicacion = ubicacion.filter(Q(nombre__contains=textoBusqueda) | Q(calle__contains=textoBusqueda))
+                mensaje_busqueda +=" Nombre o deporte que contengan la palabra "+textoBusqueda+"\n"
+            
+            #filtro para que busque mas capacidad de la indicada
+            if(not capacidad is None):
+                ubicacion = ubicacion.filter(capacidad__gt=capacidad)
+                
+            #filtros de para los equipo, en caso de que sean mas de uno o de q sea uno
+            if(len(equipo) > 0):
+                filtroOR = Q(equipo = equipo[0])
+                for ubicacion in equipo[1:]:
+                    filtroOR |= Q(equipo=equipo)
+            
+                ubicacion = ubicacion.filter(filtroOR)
+                
+                     #filtros de para los equipo, en caso de que sean mas de uno o de q sea uno
+            if(len(deporte) > 0):
+                filtroOR = Q(deporte = deporte[0])
+                for ubicacion in deporte[1:]:
+                    filtroOR |= Q(deporte=deporte)
+            
+                ubicacion = ubicacion.filter(filtroOR)
+            
+            ubicacion = ubicacion.all()
+            
+            return render(request, 'ubicacion/lista_ubicaciones.html', {'ubicacion_cubierta_deporte':ubicacion,'textoBusqueda':textoBusqueda })
+            
+    else:
+        formulario = BusquedaAvanzadaUbicacionForm(None)
+    return render(request, 'ubicacion/busqueda_ubicacion.html', {'formulario':formulario})
 
 
 #metodo para editar las ubicaciones

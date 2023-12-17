@@ -258,6 +258,42 @@ class UbicacionModelForm(ModelForm):
                 self.add_error('nombre','Ya existe una Ubicacion en esa Calle')
         
         return self.cleaned_data
+    
+class BusquedaAvanzadaUbicacionForm(forms.Form):
+    
+    equiposdisponibles = Equipos.objects.all()
+    deportesdisponibles = Deportes.objects.all()
+    
+    
+    #creamos el formulario
+    textoBusqueda = forms.CharField(required=False)
+    capacidad = forms.IntegerField(required=False)
+    equipo = forms.ModelMultipleChoiceField(queryset=equiposdisponibles, widget=forms.SelectMultiple, required=False)
+    deporte = forms.ModelMultipleChoiceField(queryset=deportesdisponibles, widget=forms.SelectMultiple, required=False)
+    
+    
+    def clean(self):
+        super().clean()
+        
+        #Obtenemos los campos
+        textoBusqueda = self.cleaned_data.get('textoBusqueda')
+        capacidad = self.cleaned_data.get('capacidad')
+        calle = self.cleaned_data.get('calle')
+        equipo = self.cleaned_data.get('equipo')
+        deporte = self.cleaned_data.get('deporte')
+        
+        #al menos tiene que poner un campo
+        if(textoBusqueda == ""
+           and capacidad is None
+           and len(equipo) == 0
+           and len(deporte) == 0):
+             self.add_error('textoBusqueda', 'no textoBusqueda')
+             self.add_error('capacidad', 'no capacidad')
+             self.add_error('equipo', 'no hay equipo')
+             self.add_error('deporte', 'no hay deporte')
+             
+
+        return self.cleaned_data
         
     
 #--------------------------------PERFIL PUBLICO---------------------------------------------------------------------
