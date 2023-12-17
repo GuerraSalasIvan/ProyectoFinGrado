@@ -406,6 +406,7 @@ def editar_promociones(request, promocion_id):
         if formulario.is_valid():
             try:  
                 formulario.save()
+                return redirect('crear_promocion')
             except Exception as error:
                 print(error)
                 
@@ -467,9 +468,27 @@ def crear_usuario_modelo(formulario):
 def usuario_buscar_avanzado(request):
     pass
 
-#metodo para editar los usuarios
+#metodo para editar las usuario
 def editar_usuarios(request, usuario_id):
-    pass
+    usuario = Usuarios.objects.get(id=usuario_id)
+    
+    datosFormulario=None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+        
+    formulario = UsuarioModelForm(datosFormulario,instance = usuario)
+    
+    if (request.method == "POST"):
+       
+        if formulario.is_valid():
+            try:  
+                formulario.save()
+                return redirect('listar_usuarios')
+            except Exception as error:
+                print(error)
+                
+    return render(request, 'usuario/actualizar.html',{"formulario":formulario,"usuario":usuario})
 
 #borrar usuario
 def borrar_usuarios(request, usuario_id):
@@ -529,9 +548,28 @@ def crear_ubicacion_modelo(formulario):
 def ubicacion_buscar_avanzado(request):
     pass
 
+
 #metodo para editar las ubicaciones
 def editar_ubicacion(request, ubicacion_id):
-    pass
+    ubicacion = Ubicacion.objects.get(id=ubicacion_id)
+    
+    datosFormulario=None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+        
+    formulario = UbicacionModelForm(datosFormulario,instance = ubicacion)
+    
+    if (request.method == "POST"):
+       
+        if formulario.is_valid():
+            try:  
+                formulario.save()
+                return redirect('listar_ubicacion')
+            except Exception as error:
+                print(error)
+                
+    return render(request, 'ubicacion/actualizar.html',{"formulario":formulario,"ubicacion":ubicacion})
 
 #borrar ubicacion
 def borrar_ubicacion(request, ubicacion_id):
@@ -589,8 +627,27 @@ def crear_perfil_publico_modelo(formulario):
 def perfil_publico_buscar_avanzado(request):
     pass
 
-def editar_perfil_publico(request):
-    pass
+#metodo para editar las perfil_publico
+def editar_perfil_publico(request, perfil_publico_id):
+    perfil_publico = Perfil_Publico.objects.get(id=perfil_publico_id)
+    
+    datosFormulario=None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+        
+    formulario = PerfilPublicoModelForm(datosFormulario,instance = perfil_publico)
+    
+    if (request.method == "POST"):
+       
+        if formulario.is_valid():
+            try:  
+                formulario.save()
+                return redirect('listar_perfil_publico')
+            except Exception as error:
+                print(error)
+                
+    return render(request, 'perfil_publico/actualizar.html',{"formulario":formulario,"perfil_publico":perfil_publico})
 
 #borrar perfil_publico
 def borrar_perfil_publico(request, perfil_publico_id):
@@ -646,8 +703,27 @@ def crear_perfil_privado_modelo(formulario):
 def perfil_privado_buscar_avanzado(request):
     pass
 
-def editar_perfil_privado(request):
-    pass
+#metodo para editar las perfil_privado
+def editar_perfil_privado(request, perfil_privado_id):
+    perfil_privado = Perfil_Privado.objects.get(id=perfil_privado_id)
+    
+    datosFormulario=None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+        
+    formulario = PerfilPrivadoModelForm(datosFormulario,instance = perfil_privado)
+    
+    if (request.method == "POST"):
+       
+        if formulario.is_valid():
+            try:  
+                formulario.save()
+                return redirect('listar_perfil_privado')
+            except Exception as error:
+                print(error)
+                
+    return render(request, 'perfil_privado/actualizar.html',{"formulario":formulario,"perfil_privado":perfil_privado})
 
 
 #borrar perfil_privado
