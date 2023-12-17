@@ -914,7 +914,7 @@ def registrar_usuario(request):
                 bibliotecario.save()
             
             login(request, user)
-            return redirect('index')
+            return redirect('indice')
     else:
         formulario = RegistroForm()
     return render(request, 'registration/signup.html', {'formulario': formulario})
