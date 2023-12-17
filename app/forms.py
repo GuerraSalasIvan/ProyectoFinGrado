@@ -331,6 +331,40 @@ class PerfilPublicoModelForm(ModelForm):
                 self.add_error('usuarios','Este usuario ya tiene un perfil publico')
         
         return self.cleaned_data
+    
+class BusquedaAvanzadaPerfilPublicoForm(forms.Form):
+    
+    ubicaciondisponibles = Ubicacion.objects.all()
+    usuariosdisponibles = Usuarios.objects.all()
+
+    #creamos el formulario
+    descripcion = forms.CharField(required=False)
+    hitos_publicos = forms.CharField(required=False)
+
+    usuarios = forms.ModelMultipleChoiceField(queryset=usuariosdisponibles, widget=forms.SelectMultiple, required=False)
+    lugar_fav = forms.ModelMultipleChoiceField(queryset=ubicaciondisponibles, widget=forms.SelectMultiple, required=False)
+    
+
+    def clean(self):
+        super().clean()
+        
+        #Obtenemos los campos
+        descripcion = self.cleaned_data.get('descripcion')
+        hitos_publicos = self.cleaned_data.get('hitos_publicos')
+        usuarios = self.cleaned_data.get('usuarios')
+        lugar_fav = self.cleaned_data.get('lugar_fav')
+        
+        #al menos tiene que poner un campo
+        if(descripcion == ""
+           and hitos_publicos == ""
+           and len(usuarios) == 0
+           and len(lugar_fav) == 0):
+             self.add_error('descripcion', 'no descripcion')
+             self.add_error('hitos_publicos', 'no hitos_publicos')
+             self.add_error('usuarios', 'no hay usuarios')
+             self.add_error('lugar_fav', 'no hay lugar_fav')
+             
+        return self.cleaned_data
 
 #--------------------------------PERFIL PRIVADO---------------------------------------------------------------------
 #Create de Perfil Privado
@@ -365,4 +399,29 @@ class PerfilPrivadoModelForm(ModelForm):
              else:
                 self.add_error('usuarios','Este usuario ya tiene un perfil publico')
         
+        return self.cleaned_data
+    
+    
+class BusquedaAvanzadaPerfilPrivadoForm(forms.Form):
+    
+    usuariosdisponibles = Usuarios.objects.all()
+
+    #creamos el formulario
+    incidencias = forms.CharField(required=False)
+    usuarios = forms.ModelMultipleChoiceField(queryset=usuariosdisponibles, widget=forms.SelectMultiple, required=False)
+    
+
+    def clean(self):
+        super().clean()
+        
+        #Obtenemos los campos
+        incidencias = self.cleaned_data.get('incidencias')
+        usuarios = self.cleaned_data.get('usuarios')
+        
+        #al menos tiene que poner un campo
+        if(incidencias == ""
+           and len(usuarios) == 0):
+             self.add_error('incidencias', 'no incidencias')
+             self.add_error('usuarios', 'no hay usuarios')
+             
         return self.cleaned_data

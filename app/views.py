@@ -603,7 +603,7 @@ def ubicacion_buscar_avanzado(request):
             #filtros de para los equipo, en caso de que sean mas de uno o de q sea uno
             if(len(equipo) > 0):
                 filtroOR = Q(equipo = equipo[0])
-                for ubicacion in equipo[1:]:
+                for equipo in equipo[1:]:
                     filtroOR |= Q(equipo=equipo)
             
                 ubicacion = ubicacion.filter(filtroOR)
@@ -611,7 +611,7 @@ def ubicacion_buscar_avanzado(request):
                      #filtros de para los equipo, en caso de que sean mas de uno o de q sea uno
             if(len(deporte) > 0):
                 filtroOR = Q(deporte = deporte[0])
-                for ubicacion in deporte[1:]:
+                for deporte in deporte[1:]:
                     filtroOR |= Q(deporte=deporte)
             
                 ubicacion = ubicacion.filter(filtroOR)
@@ -701,7 +701,53 @@ def crear_perfil_publico_modelo(formulario):
 
 #busqueda avanzada perfil_publico
 def perfil_publico_buscar_avanzado(request):
-    pass
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaPerfilPublicoForm(request.GET)
+        
+        if formulario.is_valid():
+            mensaje_busqueda = 'Se ha buscado por los siguientes valores:\n'
+            
+            perfil_publico = Perfil_Publico.objects
+            
+            descripcion = formulario.cleaned_data.get('descripcion')
+            lugar_fav = formulario.cleaned_data.get('lugar_fav')
+            hitos_publicos = formulario.cleaned_data.get('hitos_publicos')
+            usuarios = formulario.cleaned_data.get('usuarios')
+       
+            
+            if(descripcion != ""):
+                perfil_publico = perfil_publico.filter(descripcion__contains=descripcion)
+                mensaje_busqueda +=" descripcion de Perfil Publico que contengan la palabra "+descripcion+"\n"
+                
+            if(hitos_publicos != ""):
+                perfil_publico = perfil_publico.filter(hitos_publicos__contains=hitos_publicos)
+                mensaje_busqueda +=" hitos_publicos de Perfil Publico que contengan la palabra "+hitos_publicos+"\n"
+            
+
+            #filtros de para los usuarios, en caso de que sean mas de uno o de q sea uno
+            if(len(usuarios) > 0):
+                filtroOR = Q(usuarios = usuarios[0])
+                for usuarios in usuarios[1:]:
+                    filtroOR |= Q(usuarios=usuarios)
+                    
+            #filtros de para los usuarios, en caso de que sean mas de uno o de q sea uno
+            if(len(lugar_fav) > 0):
+                filtroOR = Q(lugar_fav = lugar_fav[0])
+                for lugar_fav in lugar_fav[1:]:
+                    filtroOR |= Q(lugar_fav=lugar_fav)
+            
+                perfil_publico = perfil_publico.filter(filtroOR)
+                
+    
+            perfil_publico = perfil_publico.all()
+            
+            return render(request, 'perfil_publico/lista_perfil_publico.html', {'perfil_publico':perfil_publico,'textoBusqueda':descripcion})
+            
+    else:
+        formulario = BusquedaAvanzadaPerfilPublicoForm(None)
+    return render(request, 'perfil_publico/busqueda_perfil_publico.html', {'formulario':formulario})
+
+
 
 #metodo para editar las perfil_publico
 def editar_perfil_publico(request, perfil_publico_id):
