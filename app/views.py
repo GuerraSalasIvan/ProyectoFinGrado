@@ -823,7 +823,40 @@ def crear_perfil_privado_modelo(formulario):
 
 #busqueda avanzada perfil_privado
 def perfil_privado_buscar_avanzado(request):
-    pass
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaPerfilPrivadoForm(request.GET)
+        
+        if formulario.is_valid():
+            mensaje_busqueda = 'Se ha buscado por los siguientes valores:\n'
+            
+            perfil_privado = Perfil_Privado.objects
+            
+            incidencias = formulario.cleaned_data.get('incidencias')
+            usuarios = formulario.cleaned_data.get('usuarios')
+       
+            
+            if(incidencias != ""):
+                perfil_privado = perfil_privado.filter(incidencias__contains=incidencias)
+                mensaje_busqueda +=" incidencias de Perfil privado que contengan la palabra "+incidencias+"\n"
+                
+
+            #filtros de para los usuarios, en caso de que sean mas de uno o de q sea uno
+            if(len(usuarios) > 0):
+                filtroOR = Q(usuarios = usuarios[0])
+                for usuarios in usuarios[1:]:
+                    filtroOR |= Q(usuarios=usuarios)
+            
+                perfil_privado = perfil_privado.filter(filtroOR)
+                
+    
+            perfil_privado = perfil_privado.all()
+            
+            return render(request, 'perfil_privado/lista_perfil_privado.html', {'perfil_privado':perfil_privado,'textoBusqueda':incidencias})
+            
+    else:
+        formulario = BusquedaAvanzadaPerfilPrivadoForm(None)
+    return render(request, 'perfil_privado/busqueda_perfil_privado.html', {'formulario':formulario})
+
 
 #metodo para editar las perfil_privado
 def editar_perfil_privado(request, perfil_privado_id):
