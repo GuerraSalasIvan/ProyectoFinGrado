@@ -4,6 +4,8 @@ from .models import *
 from .forms import *
 from django.contrib import messages
 from datetime import datetime
+from django.contrib.auth.models import Group
+from django.contrib.auth import login
 
 # Create your views here.
 
@@ -892,6 +894,30 @@ def borrar_perfil_privado(request, perfil_privado_id):
         #como no tengo una vista 'mostrar perfil_privado' lo redirijo al buscador, aqui desde ahi si se pueden ver 
     return redirect('listar_perfil_privado')
 
+
+#------------------------ REGISTRO -------------------------------------
+def registrar_usuario(request):
+    if request.method == 'POST':
+        formulario = RegistroForm(request.POST)
+        if formulario.is_valid():
+            user = formulario.save()
+            rol = int(formulario.cleaned_data.get('rol'))
+            if(rol == UserLogin.cliente):
+                grupo = Group.objects.get(name='Cliente') 
+                grupo.user_set.add(user)
+                cliente = Cliente.objects.create( usuario = user)
+                cliente.save()
+            elif(rol == UserLogin.entrenador):
+                grupo = Group.objects.get(name='Entrenador') 
+                grupo.user_set.add(user)
+                bibliotecario = Entrenador.objects.create(usuario = user)
+                bibliotecario.save()
+            
+            login(request, user)
+            return redirect('index')
+    else:
+        formulario = RegistroForm()
+    return render(request, 'registration/signup.html', {'formulario': formulario})
 
 
 #Páginas de Error

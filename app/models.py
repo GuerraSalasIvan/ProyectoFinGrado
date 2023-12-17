@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator,MinLengthValidator
+from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
@@ -24,6 +25,23 @@ class Usuarios(models.Model):
     
     def __str__(self):
         return self.nombre
+
+class UserLogin(AbstractUser):
+    administrador=1
+    cliente=2
+    entrenador=3
+    
+    ROLES= ((administrador,'administrador'),
+            (cliente,'cliente'),
+            (entrenador,'entrenador'),
+            )
+    
+    rol = models.PositiveSmallIntegerField(choices=ROLES, default=1)
+    
+    # Agregar estos atributos para evitar el conflicto
+    groups = models.ManyToManyField('auth.Group', related_name='custom_user_groups')
+    user_permissions = models.ManyToManyField('auth.Permission', related_name='custom_user_permissions')
+
     
 
 class Categoria_Persona(models.Model):
@@ -74,6 +92,11 @@ class Equipos(models.Model):
     
 #Necesito validar el numero maximo de jugadores en funcion al deporte
 
+class Cliente(models.Model):
+    usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
+    
+class Entrenador(models.Model):
+    usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
 
 class Ubicacion(models.Model):
     nombre = models.CharField(max_length=150)

@@ -58,4 +58,7 @@ urlpatterns = [
     path('buscar/perfil_privado', views.perfil_privado_buscar_avanzado, name='perfil_privado_buscar_avanzado'),
     path('perfil_privado/actualizar/<int:perfil_privado_id>', views.editar_perfil_privado, name='editar_perfil_privado'),
     path('perfil_privado/borrar/<int:perfil_privado_id>', views.borrar_perfil_privado, name='borrar_perfil_privado'),
+    
+    #--------------REGISTRO ------------
+    path('registrar', views.registrar_usuario, name='registrar_usuario')
 ]

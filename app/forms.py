@@ -3,6 +3,7 @@ from django import forms
 from .models import *
 from datetime import date
 import datetime
+from django.contrib.auth.forms import UserCreationForm
 
 #--------------------------------EQUIPO---------------------------------------------------------------------
 class EquiposModelForms(ModelForm):
@@ -425,3 +426,18 @@ class BusquedaAvanzadaPerfilPrivadoForm(forms.Form):
              self.add_error('usuarios', 'no hay usuarios')
              
         return self.cleaned_data
+    
+    
+class RegistroForm(UserCreationForm):
+    
+    roles = (
+        (UserLogin.cliente, 'cliente'),
+        (UserLogin.entrenador, 'entrenador')
+    )
+    
+    rol = forms.ChoiceField(choices=roles)
+    
+    class Meta:
+        model = UserLogin
+        fields = ('username','email','password1','password2','rol')
+        
