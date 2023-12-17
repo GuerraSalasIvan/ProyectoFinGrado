@@ -466,7 +466,38 @@ def crear_usuario_modelo(formulario):
 
 #busqueda avanzada usuario
 def usuario_buscar_avanzado(request):
-    pass
+    if(len(request.GET) > 0):
+        formulario = BusquedaAvanzadaUsuarioForm(request.GET)
+        
+        if formulario.is_valid():
+            mensaje_busqueda = 'Se ha buscado por los siguientes valores:\n'
+            
+            usuario = Usuarios.objects
+            
+            textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
+            rangoEdad = formulario.cleaned_data.get('rangoEdad')
+            sexo = formulario.cleaned_data.get('sexo')
+            
+            if(textoBusqueda != ""):
+                usuario = usuario.filter(Q(nombre__contains=textoBusqueda) | Q(apellidos__contains=textoBusqueda))
+                mensaje_busqueda +=" Nombre o deporte que contengan la palabra "+textoBusqueda+"\n"
+            
+            #filtro para que busque descuento mayor 
+            if(not rangoEdad is None):
+                usuario = usuario.filter(edad=rangoEdad)
+                
+            #filtro para que busque por sexo
+            if(not sexo is None):
+                usuario = usuario.filter(sexo=sexo)
+            
+            usuario = usuario.all()
+            
+            return render(request, 'usuario/listar_usuarios.html', {'listar_usuarios':usuario,'textoBusqueda':textoBusqueda })
+            
+    else:
+        formulario = BusquedaAvanzadaUsuarioForm(None)
+    return render(request, 'usuario/busqueda_usuario.html', {'formulario':formulario})
+            
 
 #metodo para editar las usuario
 def editar_usuarios(request, usuario_id):

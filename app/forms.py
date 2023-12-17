@@ -71,8 +71,7 @@ class BusquedaAvanzadaEquipoForm(forms.Form):
 
 
 
-#--------------------------------PROMOCION---------------------------------------------------------------------
-        
+#--------------------------------PROMOCION---------------------------------------------------------------------       
 class BusquedaAvanzadaPromocionForm(forms.Form):
     
     usuariosdisponibles=Usuarios.objects.all()
@@ -190,6 +189,38 @@ class UsuarioModelForm(ModelForm):
              else:
                 self.add_error('nombre','Ya existe un usuario con ese nombre')
         
+        return self.cleaned_data
+    
+
+class BusquedaAvanzadaUsuarioForm(forms.Form):
+    
+    #creamos el formulario
+    textoBusqueda = forms.CharField(required=False)
+    rangoEdad = forms.IntegerField(required=False)
+    sexo = forms.ChoiceField(choices=Usuarios.GENERO, required=False)
+    
+    def clean(self):
+        super().clean()
+        
+        #Obtenemos los campos
+        textoBusqueda = self.cleaned_data.get('textoBusqueda')
+        rangoEdad = self.cleaned_data.get('rangoEdad')
+        sexo = self.cleaned_data.get('sexo')
+        
+        #al menos tiene que poner un campo
+        if(textoBusqueda == ""
+           and rangoEdad is None
+           and sexo is None):
+             self.add_error('textoBusqueda', 'no textoBusqueda')
+             self.add_error('rangoEdad', 'no rangoEdad')
+             self.add_error('sexo', 'no hay usuarios')
+             
+              #solo permitir buscar por edad menor a 100 años
+        else:
+            if (not(rangoEdad is None) and (rangoEdad < 0 and rangoEdad > 100)):
+                self.add_error('rangoEdad', 'debe ser mayor que 0 y menor a 100')
+    
+
         return self.cleaned_data
     
 
