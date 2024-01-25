@@ -34,9 +34,6 @@ urlpatterns = [
     path('promocion/actualizar/<int:promocion_id>', views.editar_promociones, name='editar_promociones'),
     path('promocion/borrar/<int:promocion_id>', views.borrar_promociones, name='borrar_promociones'),
     
-<<<<<<< HEAD
-    
-=======
     #--------------USUARIO-----------
     
     path('crear_usuario', views.usuario_create, name='crear_usuario'),
@@ -64,5 +61,4 @@ urlpatterns = [
     
     #--------------REGISTRO ------------
     path('registrar', views.registrar_usuario, name='registrar_usuario')
->>>>>>> refs/remotes/origin/main
 ]

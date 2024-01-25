@@ -48,7 +48,7 @@ class EquiposModelForms(ModelForm):
             self.add_error('capacidad','No puede haber mas de 20 miembros')
             
 class BusquedaEquipoForm(forms.Form):
-    nombre = forms.CharField(required=False)
+    textoBusqueda = forms.CharField(required=True)
     
 
 

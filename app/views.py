@@ -419,11 +419,7 @@ def borrar_promociones(request, promocion_id):
     promocion = Promocion.objects.get(id=promocion_id)
     try:
         promocion.delete()
-<<<<<<< HEAD
-        messages.success(request, "Se ha elimnado el equipo "+promocion.nombre+" correctamente")
-=======
         messages.success(request, "Se ha elimnado la promocion "+promocion.nombre+" correctamente")
->>>>>>> refs/remotes/origin/main
     except Exception as error:
         print(error)
         #como no tengo una vista 'mostrar promocion' lo redirijo al buscador, aqui desde ahi si se pueden ver 

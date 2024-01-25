@@ -20,12 +20,9 @@ from django.conf.urls import handler400,handler404,handler403,handler500
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('app.urls')),
-<<<<<<< HEAD
     path('api/v1/', include('app.api_urls')),
     path('oauth2/',include('oauth2_provider.urls',namespace='oauth2_provider')),
-=======
     path('accounts/',include('django.contrib.auth.urls')),
->>>>>>> refs/remotes/origin/main
 ]
 
 handler404 = "app.views.mi_error_400"

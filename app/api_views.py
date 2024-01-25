@@ -18,17 +18,16 @@ def equipos_list(request):
 
 @api_view(['GET'])
 def equipo_buscar(request):
-    if(request.user.has_perm("biblioteca.view_equipo")):
-        formulario = BusquedaEquipoForm(request.query_params)
-        if(formulario.is_valid()):
-            texto = formulario.data.get('textoBusqueda')
-            equipos = Equipos.objects.select_related('deporte').prefetch_related('usurio')
-            equipos = equipos.filter(Q(nombre__contains=texto) | Q(descripcion__contains=texto)).all()
-            serializer = EquipoSerializer(equipos, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    formulario = BusquedaEquipoForm(request.query_params)
+    if(formulario.is_valid()):
+        texto = formulario.data.get('textoBusqueda')
+        equipos = Equipos.objects.select_related('deporte').prefetch_related('usurio')
+        equipos = equipos.filter(nombre__contains=texto).all()
+        serializer = EquipoSerializer(equipos, many=True)
+        return Response(serializer.data)
     else:
-        return Response({"Sin permisos"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
