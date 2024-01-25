@@ -1,0 +1,20 @@
+{% extends "estructura/principal.html" %}
+
+{% block contenido %} 
+{% load bootstrap5 %}
+    <form action = "{% url 'perfil_privado_buscar_avanzado' %}" method = "GET"> 
+        
+        {% csrf_token %}
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.incidencias show_label=True %}
+        </div>
+
+        <div class="mb-4">
+            {% bootstrap_field formulario.usuarios show_label=True %}
+        </div>
+
+        <button type="submit" class="btn btn-primary" >Enviar</button>
+    </form>
+
+{% endblock contenido %}
