@@ -273,7 +273,7 @@ def equipo_eliminar(request,equipo_id):
     equipo = Equipos.objects.get(id=equipo_id)
     try:
         equipo.delete()
-        messages.success(request, "Se ha elimnado el libro "+equipo.nombre+" correctamente")
+        messages.success(request, "Se ha elimnado el equipo "+equipo.nombre+" correctamente")
     except Exception as error:
         print(error)
     return redirect('mostar_equipo')
@@ -360,12 +360,11 @@ def borrar_promociones(request, promocion_id):
     promocion = Promocion.objects.get(id=promocion_id)
     try:
         promocion.delete()
-        messages.success(request, "Se ha elimnado el libro "+promocion.nombre+" correctamente")
+        messages.success(request, "Se ha elimnado el equipo "+promocion.nombre+" correctamente")
     except Exception as error:
         print(error)
         #como no tengo una vista 'mostrar promocion' lo redirijo al buscador, aqui desde ahi si se pueden ver 
     return redirect('promocion_buscar_avanzado')
-
 
 
 

@@ -20,7 +20,8 @@ from django.conf.urls import handler400,handler404,handler403,handler500
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('app.urls')),
-    path('api/v1/', include('app.api_urls'))
+    path('api/v1/', include('app.api_urls')),
+    path('oauth2/',include('oauth2_provider.urls',namespace='oauth2_provider')),
 ]
 
 handler404 = "app.views.mi_error_400"

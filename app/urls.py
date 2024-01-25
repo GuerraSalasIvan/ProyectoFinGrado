@@ -27,5 +27,7 @@ urlpatterns = [
     
     path('buscar/promocion', views.promocion_buscar_avanzado, name='promocion_buscar_avanzado'),
     path('promocion/actualizar/<int:promocion_id>', views.editar_promociones, name='editar_promociones'),
-     path('promocion/borrar/<int:promocion_id>', views.borrar_promociones, name='borrar_promociones'),
+    path('promocion/borrar/<int:promocion_id>', views.borrar_promociones, name='borrar_promociones'),
+    
+    
 ]
