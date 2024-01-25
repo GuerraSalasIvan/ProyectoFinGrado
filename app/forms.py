@@ -55,15 +55,21 @@ class BusquedaEquipoForm(forms.Form):
 class BusquedaAvanzadaEquipoForm(forms.Form):
     
     textoBusqueda = forms.CharField(required=False)
+    capacidad = forms.IntegerField(required=False)
 
     def clean(self):
         super().clean()
         
         #Obtenemos los campos
         textoBusqueda = self.cleaned_data.get('textoBusqueda')
+        capacidad = self.cleaned_data.get('capacidad')
 
         if(textoBusqueda == ""):
              self.add_error('textoBusqueda', 'no textoBusqueda')
+        
+        if(capacidad == ""
+           or capacidad < 0):
+             self.add_error('capacidad', 'no capacidad')
         
         return self.cleaned_data
     

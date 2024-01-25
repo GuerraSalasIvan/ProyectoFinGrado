@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from .forms import *
 from rest_framework import status
 from django.db.models import Q,Prefetch
+from django.shortcuts import render, redirect
 
 
 @api_view(['GET'])
@@ -31,3 +32,30 @@ def equipo_buscar(request):
 
 
 
+@api_view(['GET'])
+def equipos_busqueda_avanzada(request):
+
+    if(len(request.query_params) > 0):
+        formulario = BusquedaAvanzadaEquipoForm(request.query_params)
+        if formulario.is_valid():
+        
+            equipos = Equipos.objects.select_related('deporte').prefetch_related('usurio')
+            
+            #Obtener filtros
+            textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
+            capacidad = formulario.cleaned_data.get('capacidad')
+            
+            if(textoBusqueda != ""):
+                equipos = equipos.filter(Q(nombre__contains=textoBusqueda) | Q(deporte__deporte__contains=textoBusqueda))
+                 
+            if(capacidad != None):
+                equipos = equipos.filter(capacidad__gt=capacidad)
+                
+            equipo = equipos.all()
+            
+            serializer = EquipoSerializer(equipo, many=True)
+            return Response(serializer.data)
+        else:
+            return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
