@@ -7,25 +7,6 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-class Usuarios(models.Model):
-    nombre = models.CharField(max_length=50)
-    apellidos = models.CharField(max_length=150)
-    edad = models.IntegerField()
-    GENERO = [
-        ('MAS','Masculino'),
-        ('FEM','Femenino'),
-        ('---','Sin_Asignar'),
-    ]
-    #Si no se especifica el género, no se puede participar en deportes.
-    sexo = models.CharField(
-        max_length = 3,
-        choices= GENERO,
-        default = '---'
-    )
-    
-    def __str__(self):
-        return self.nombre
-
 class UserLogin(AbstractUser):
     administrador=1
     cliente=2
@@ -42,6 +23,31 @@ class UserLogin(AbstractUser):
     groups = models.ManyToManyField('auth.Group', related_name='custom_user_groups')
     user_permissions = models.ManyToManyField('auth.Permission', related_name='custom_user_permissions')
 
+    
+    
+class Usuarios(models.Model):
+    
+    edad = models.IntegerField()
+    GENERO = [
+        ('MAS','Masculino'),
+        ('FEM','Femenino'),
+        ('---','Sin_Asignar'),
+    ]
+    #Si no se especifica el género, no se puede participar en deportes.
+    sexo = models.CharField(
+        max_length = 3,
+        choices= GENERO,
+        default = '---'
+    )
+    
+    rol=models.OneToOneField(UserLogin, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.nombre
+    
+class Entrenador(models.Model):
+
+    rol = models.OneToOneField(UserLogin, on_delete=models.CASCADE)
     
 
 class Categoria_Persona(models.Model):
