@@ -4,5 +4,7 @@ from .api_views import *
 urlpatterns = [
     path('equipos',equipos_list),
     path('busqueda/equipo_simple', equipo_buscar),
-    path('equipos/busqueda_avanzada', equipos_busqueda_avanzada)
+    path('equipos/busqueda_avanzada', equipos_busqueda_avanzada),
+    #----------------- Ubicacion -----------------------
+    path('ubicacion',ubicacion_list),
 ]

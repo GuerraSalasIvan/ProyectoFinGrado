@@ -28,3 +28,14 @@ class EquipoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipos
         fields = ('nombre','capacidad','deporte','usuario')
+        
+        
+class UbicacionSerializer(serializers.ModelSerializer):
+    
+    deporte=DeporteSerializer(read_only= True, many=True)
+    
+    equipo = EquipoSerializer(read_only= True, many=True)
+    
+    class Meta:
+        model = Ubicacion
+        fields = ('nombre','capacidad','calle','deporte','equipo')

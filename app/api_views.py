@@ -59,3 +59,15 @@ def equipos_busqueda_avanzada(request):
             return Response(formulario.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    
+    
+#------------------------ UBICACION --------------------------------
+
+@api_view(['GET'])
+def ubicacion_list(request):
+    
+    ubicacion = Ubicacion.objects.all()
+    serializer = UbicacionSerializer(ubicacion, many=True)
+    return Response(serializer.data)

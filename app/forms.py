@@ -171,7 +171,7 @@ class PromocionModelForm(ModelForm):
 class UsuarioModelForm(ModelForm):
     class Meta:
         model = Usuarios
-        fields = ['nombre','apellidos','edad','sexo']
+        fields = ['edad','sexo']
         labels = {
             "nombre": ("Nombre usuario"),
         }
