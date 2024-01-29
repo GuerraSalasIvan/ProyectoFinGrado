@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import handler400,handler404,handler403,handler500
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,6 +28,9 @@ urlpatterns = [
     path('api/v1/', include('app.api_urls')),
     path('oauth2/',include('oauth2_provider.urls',namespace='oauth2_provider')),
     path('accounts/',include('django.contrib.auth.urls')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
 ]
 
 handler404 = "app.views.mi_error_400"

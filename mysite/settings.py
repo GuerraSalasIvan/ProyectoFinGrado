@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-dp%%z$sc&6gjunok4n$)$2j($jdo_5(9&t%zmf)34h6)5$)evm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com','0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com','0.0.0.0','localhost:8000']
 
 
 # Application definition
@@ -87,6 +87,11 @@ REST_FRAMEWORK = {
 
     'DEFAULT_PERMISSION_CLASSES': (
         #'rest_framework.permissions.IsAuthenticated',
+    ),
+    
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+    
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
